@@ -1,0 +1,3172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SHA-3 Visualization</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Roboto+Slab&display=swap" rel="stylesheet">
+  <style>
+
+    html, body {
+      background-color: black;
+      color: rgb(184, 184, 184);
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      margin: 0;
+    }
+
+    body {
+      padding: 20px;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: "Open Sans";
+    }
+
+    a:link, a:visited{
+      color: rgb(88, 111, 236);
+    }
+
+    /* mouse over link */
+    a:hover, a:active {
+      color: rgb(151, 161, 255);
+    }
+
+    h1, h2, h3 {
+      font-family: "Roboto Slab";
+      color: white;
+    }
+
+    h1 {
+      margin-top: 50px;
+      margin-bottom: 100px;
+    }
+
+    p, select, input, textarea {
+      font-family: "Open Sans";
+    }
+
+    select {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      /* Remove default arrow */
+      /* background-image: url(...); */
+      /* Add custom arrow */
+      background-color: black;
+      border: 2px dashed rgb(201, 91, 201);
+      padding: 10px;
+      margin-left: 10px;
+      margin-right: 10px;
+      min-width: max-content;
+      color: rgb(201, 91, 201);
+      font-size: medium;
+      cursor: pointer;
+    }
+
+    input {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      background-color: black;
+      font-size: medium;
+      padding: 10px;
+      margin-left: 10px;
+      margin-right: 10px;
+      
+    }
+
+
+
+
+
+
+    .qa h3 {
+      /* color: green; */
+      cursor: pointer;
+      padding-left: 30px;
+    }
+
+    .qa.expanded {
+      margin-bottom: 80px;
+    }
+
+    .qa:not(.expanded) :not(h3):not(.expander) {
+      display: none;
+    }
+
+    .qa.expanded .expander {
+      display: none;
+    }
+
+
+    .qa {
+      position: relative; /* This is needed for (-) (+) to hover */
+    }
+
+    .qa .expander, .qa .hider {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .math {
+      margin: 0;
+      text-align: center;
+    }
+
+    .important1 {
+      color: rgb(103, 231, 139);
+      font-weight: bold;
+    }
+
+    .important2 {
+      color: rgb(201, 91, 201);
+      font-weight: bold;
+    }
+
+
+
+
+    .normaltable {
+      font-size: large;
+      text-align: center;
+      margin: auto;
+    }
+
+    .normaltable thead td{
+      border-bottom: 1px solid white;
+      font-family: "Roboto Slab";
+      padding-right: 10px;
+      padding-left: 10px;
+    }
+
+    .normaltable tr:nth-child(odd) {
+      color: rgb(184, 184, 184);
+    }
+    
+    .normaltable tr:nth-child(even) {
+      background-color: rgb(20,20,20);
+      color: white;
+    }
+
+
+
+
+    #input {
+      /* background-color: rgb(19, 19, 19); */
+      border-radius: 20px;
+      margin-top: 200px;
+      margin-bottom: 200px;
+    }
+
+    #input .shakeLength {
+      width: 70px;
+      outline: none;
+    }
+
+    #input .shakeLength.error {
+      color: rgb(255, 0, 0);
+      border: 2px dashed rgb(255, 0, 0);
+    }
+
+    #input .shakeLength.noError {
+      color: rgb(103, 231, 139);
+      border: 2px dashed rgb(103, 231, 139);
+    }
+
+
+
+
+
+
+    #stringInput, #bitsnbytesInput, #fileInput {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      background-color: black;
+      color: rgb(184, 184, 184);
+      border: 2px dashed rgb(184, 184, 184);
+      width: 100%;
+      height: 200px;
+      outline: none;
+      margin-top: 100px;
+      font-size: large;
+      padding: 10px;
+      overflow-x: auto;
+    }
+
+
+
+
+
+
+
+
+    #fileInput.entered {
+      opacity: .5;
+    }
+
+
+
+
+
+
+    #inputErrorMsg {
+      color: rgb(150, 19, 19);
+      border-radius: 15px;
+      padding: 20px;
+      margin-top: 50px;
+      border: 1px solid rgb(90, 24, 24);
+      text-align: center;
+    }
+
+
+
+ .breakdowndiv {
+  max-width: 100%;
+  overflow-y: hidden;
+  overflow-x: scroll;
+ }
+
+ .breakdown td:nth-child(even) {
+  color:rgb(103, 231, 139);
+ }
+
+ .breakdown td:nth-child(odd) {
+  color:rgb(201, 91, 201);
+ }
+
+ .breakdown td {
+  padding-left: 10px;
+ }
+
+ .breakdown tr:nth-of-type(1) {
+  /* background-color: yellow; */
+  font-size: medium;
+  text-align: center;
+ }
+
+ .breakdown tr:nth-of-type(2) {
+  /* background-color: orange; */
+  font-size: xx-large;
+  text-align: center;
+  min-height: 50px;
+ }
+
+
+ #paddingsection .mathtable {
+  margin: auto;
+  text-align: center;
+}
+
+#howmanyzerostoput {
+   max-width: 100%;
+   overflow-y: hidden;
+   overflow-x: scroll;
+ }
+
+ #paddingsection .mathtable td:nth-child(even) {
+  color: rgb(103, 231, 139);
+ }
+
+ #blocksafterpadding {
+  max-width: 100%;
+  /* overflow-y: hidden;
+  overflow-x: scroll; */
+  padding-top: 30px;
+  padding-bottom: 30px;
+  overflow-wrap: anywhere;
+ }
+
+ #blocksafterpadding li {
+  padding-top: 30px;
+ }
+
+ .whitecolor {
+  color: white;
+ }
+
+ .pinkcolor {
+  color: rgb(201, 91, 201);
+ }
+
+ .greencolor {
+  color: rgb(103, 231, 139);
+ }
+
+ .goldcolor {
+  color: rgb(255, 237, 133);
+ }
+
+ .redcolor {
+  color: lightcoral;
+ }
+
+
+
+ #solution, #paddingsection, #introtostate, #absorbingphase, #nonshakesqueezingphase, #squeezingphase {
+  margin-top: 200px;
+ }
+
+ #solution {
+  margin-bottom: 500px;
+ }
+
+ #absorbingphase .fillin,
+ #squeezingphase .fillin {
+  text-align: center;
+ }
+
+ #absorbphasecontroller,
+ #squeezephasecontroller {
+  text-align: end;
+  margin-top: 100px;
+ }
+
+ #absorbphasecontroller button,
+ #squeezephasecontroller button {
+      background-color: black;
+      border: 2px dashed rgb(103, 231, 139);
+      /* border-radius: 10px; */
+      padding: 10px;
+      margin-left: 0px;
+      margin-right: 0px;
+      color: rgb(103, 231, 139);
+      font-size: medium;
+      cursor: pointer;
+ }
+
+ #absorbphasecontroller button:disabled,
+ #squeezephasecontroller button:disabled {
+  border: 2px dashed gray;
+  color: gray;
+  cursor: initial;
+ }
+
+ #absorbphasecontroller button:nth-of-type(1),
+ #squeezephasecontroller button:nth-of-type(1) {
+  margin-left: 40px;
+ }
+
+ #absorbXorStep, #absorbThetaStep, #absorbRhoStep, #absorbPiStep, #absorbChiStep, #absorbIotaStep,
+ #squeezeTakeStep, #squeezeThetaStep, #squeezeRhoStep, #squeezePiStep, #squeezeChiStep, #squeezeIotaStep {
+  border: 1px solid rgb(48, 48, 48);
+  padding: 10px;
+ }
+
+ 
+
+ .brightgreen {
+  color: rgb(0, 255, 0);
+  font-weight: bolder;
+  display: inline-block;
+  transform: scale(1.2);
+ }
+
+.brightgold {
+  color: rgb(255, 174, 0);
+  font-weight: bolder;
+  display: inline-block;
+  transform: scale(1.2);
+ }
+
+.brightred {
+  color: rgb(255, 61, 61);
+  font-weight: bolder;
+  display: inline-block;
+  transform: scale(1.2);
+ }
+
+ .dimgold {
+  color: rgb(100, 97, 80);
+ }
+
+ .dimred {
+  color: rgb(94, 71, 71);
+ }
+
+
+   .gray {
+    background-color: rgb(0, 0, 0);
+    color: rgb(109, 109, 109);
+  }
+
+   .gray1 {
+    background-color: rgb(0, 0, 0);
+    color: rgb(100, 100, 100);
+  }
+
+   .gray2 {
+    background-color: rgb(0, 0, 0);
+    color: rgb(89, 89, 89);
+  }
+
+   .gray3 {
+    background-color: rgb(0, 0, 0);
+    color: rgb(79, 79, 79);
+  }
+
+   .gray4 {
+    background-color: rgb(0, 0, 0);
+    color: rgb(69, 69, 69);
+  }
+
+
+   .white {
+    color: white;
+    font-weight: bolder;
+    display: inline-block;
+    transform: scale(1.2);
+  }
+
+   .bg {
+    color: rgb(61, 61, 61);
+  }
+
+
+
+    #githubLink {
+      display: block;
+      position: absolute;
+      top: 20px;
+      right: 20px;
+    }
+
+
+
+
+    .stateTransitionContainer {
+      max-width: 100%;
+      overflow-y: hidden;
+      overflow-x: scroll;
+    }
+
+
+    .stateContainer {
+      max-width: 100%;
+      overflow-y: hidden;
+      overflow-x: scroll;
+      padding-bottom: 30px;
+      text-align: center;
+    }
+
+    .state {
+      display: inline-block;
+      line-height: 1;
+      max-width: 100%;
+      overflow-y: hidden;
+      overflow-x: scroll;
+      text-wrap: nowrap;
+    }
+
+    .state div {
+      color: red;
+    }
+
+    /* .state span {
+      padding-right: 1px;
+      padding-left: 1px;
+    } */
+
+    .hidecursor {
+      cursor: none;
+    }
+
+    ::marker {
+      color: rgb(119, 80, 141);
+    }
+
+    .stateTransitionContainer {
+      text-align: center;
+    }
+
+    .stateTransitionContainer > * {
+      vertical-align:middle;
+      display: inline-block;
+    }
+
+    .stateTransitionContainer > .arrow {
+      font-size: large;
+      padding-left: 10px;
+    }
+
+    #absorbXorInputBlock, #absorbIotaRoundConst,
+    #squeezeIotaRoundConst {
+      /* overflow-wrap: anywhere; */
+      line-height: 1;
+      /* padding-left: 40px; */
+      /* max-width: 100%; */
+      /* overflow-y: scroll;
+      overflow-x: scroll; */
+      /* text-wrap: nowrap; */
+      text-align: start;
+      display: block;
+      width: fit-content;
+
+
+    }
+
+    .perished {
+      visibility: hidden;
+      line-height: 0;
+    }
+
+    #absorbXorInputBlock span, .state span {
+      display: inline-block;
+    }
+
+    .stateDescription {
+      padding-left: 40px;
+      padding-bottom: 0;
+      margin-bottom: 0;
+      text-align: start;
+    }
+
+    .stateTransitionContainer > .arrow {
+        display: none;
+      }
+
+    
+      .aBitOfMarginHere {
+        margin-top: 200px;
+      }
+
+
+/* 
+    @media only screen and (max-width: 1300px) {
+      #thisIsMobile {}
+
+      body {
+        padding: 20px;
+      }
+
+      .stateTransitionContainer > .arrow {
+        display: none;
+      }
+
+    }
+
+    @media only screen and (min-width: 1300px) {
+      #thisIsDesktop {}
+
+      body {
+        padding-left: 15%;
+        padding-right: 15%;
+      }
+
+    } */
+
+    
+
+  </style>
+</head>
+<body>
+  
+  <h1>SHA-3 Step-by-Step Visualization</h1>
+  <a id="githubLink" href="https://github.com/denizbasgoren/sha3">Github</a>
+
+  <section class="qa">
+    <span class="hider">(–)</span>
+    <span class="expander">(+)</span>
+    <h3>What is a hash function?</h3>
+    <p>A hash function is a simple function that <span class="important1">takes in a number</span> and <span class="important2">returns a number</span>. The input is a number that can be <span class="important1">as large as desired</span> (for example from -∞ to +∞). The output is a number that must be <span class="important2">bounded</span> (for example from 0 to 10). Any function that satisfies these properties is called a hash function.</p>
+    <p>As an example, let's consider a hash function called f. Can you guess the rule of this hash function?</p>
+    <p class="math">f(5) = 5</p>
+    <p class="math">f(15) = 5</p>
+    <p class="math">f(24005) = 5</p>
+    <p class="math">f(11113) = 3</p>
+    <p class="math">f(111222333444555666) = 6</p>
+    <p>As seen in the examples above, f can take in integers as large as desired, and outputs numbers from 0 to 10 only. The rule is that f simply returns the last digit of the number. Thus the general formula of f would be:</p>
+    <p class="math">f(x) = x mod 10</p>
+    </p>
+  </section>
+  <section class="qa">
+    <span class="hider">(–)</span>
+    <span class="expander">(+)</span>
+    <h3>What is a cryptographic hash function?</h3>
+    <p>A hash function is called cryptographic or secure when it's hard to find <span class="important1">collisions</span> in the hash function. A collision is found when we discover two inputs that result in the same output. Let's take the f function that we described previously. f(5) and f(15) both result in 5, so f is said to have collisions. This makes f unsecure. For cryptographic applications, we desire our hash functions to be <span class="important2">secure</span>.</p>
+    <p>Now let's introduce another function, called g, which is secure. This function outputs numbers from 0 to 10, just like f. Can you guess the rule of this hash function?</p>
+    <p class="math">g(5) = 2</p>
+    <p class="math">g(15) = 3</p>
+    <p class="math">g(24005) = 6</p>
+    <p class="math">g(11113) = 1</p>
+    <p class="math">g(111222333444555666) = 7</p>
+    <p>Unlike f, this function doesn't have an apparent rule. Say we want to find collisions in g by evaluating the function with strategically chosen inputs. Since we don't know the rule, we evaluate g with random inputs. At best, on the very first try we'll find a collision. At worst, after 5 more tries we'll find a collision. In general, if a hash function outputs numbers <span class="important2">from 0 to N</span>, if <span class="important1">it takes N tries</span> to find a collision, that function is considered secure.</p>
+  </section>
+  <section class="qa">
+    <span class="hider">(–)</span>
+    <span class="expander">(+)</span>
+    <h3>What is SHA-3?</h3>
+    <p>SHA-3, or Secure Hashing Algorithm 3, is a group of hashing functions that are proven to be secure, and are used in cryptographic applications like Ethereum. National Institute of Standards and Technology (NIST) organized a public competition in 2006 to discover the best hashing functions. In 2012, <span class="important1">Keccak Algorithm</span> was selected as the winner of the competition. In 2015, Keccak was standardized under the name <span class="important2">SHA-3</span>.</p>
+    <p>There are <span class="important2">6 variants</span> of the function family in SHA-3: <span class="important1">sha3-224</span>, <span class="important2">sha3-256</span>, <span class="important1">sha3-384</span>, <span class="important2">sha3-512</span>, <span class="important1">shake128</span>, and <span class="important2">shake256</span>. The difference is in the upper bound of the hash. For example, sha3-224 outputs 224-bit hashes, that is, numbers from 0 to 2^224. The number is so large that it's practically impossible to find a collision.</p>
+    <p>Shake128 and Shake256 are also known as <span class="important1">Extended Output Functions (XOF)</span>. The upper bound of these functions is a parameter that is up to the user.</p>
+  </section>
+  <section class="qa">
+    <span class="hider">(–)</span>
+    <span class="expander">(+)</span>
+    <h3>What are other useful resources about SHA-3?</h3>
+    <p><a href="https://chemejon.io/sha-3-explained/" class="href">SHA-3 Explained in Plain English</a> (Another explainer)</p>
+    <p><a href="https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf" class="href">NIST FIPS 202</a> (The standard itself)</p>
+  </section>
+
+  <section id="input">
+    <p>I want to calculate a
+      <select id="flavorSelector">
+        <option value="sha3-224">sha3-224</option>
+        <option value="sha3-256" selected="selected">sha3-256</option>
+        <option value="sha3-384">sha3-384</option>
+        <option value="sha3-512">sha3-512</option>
+        <option value="shake128">shake128</option>
+        <option value="shake256">shake256</option>
+      </select> hash<span id="shakePart"> that is <input class="shakeLength" type="text"> bits long</span>.
+        The input will be 
+      <select id="imSelector">
+        <option value="string">a string</option>
+        <option value="bytes">bits and bytes</option>
+        <option value="file">a file</option>
+      </select>.
+    </p>
+
+      <textarea id="stringInput" placeholder="Write your text here...">Hello world!</textarea>
+
+      <textarea id="bitsnbytesInput" placeholder="Write your bits and bytes here... &NewLine;Example: 5f 3a d9 0A ++-- &NewLine;Hex digits 'a' to 'f' are case-insensitive. - and + represent the bits 0 and 1 respectively. Adding bits to the end may be necessary when the bits aren't divisible by 8. Whitespace, including newlines is ignored.
+      
+      "></textarea>
+
+      <textarea id="fileInput" placeholder="Drag and drop your file here, or click to select." readonly></textarea>
+      <input type="file" id="invisibleFileInput" style="display:none">
+
+      <p id="inputErrorMsg"></p>
+
+  </section>
+
+  <section id="solution">
+
+      <h3>Obtaining the bit array</h3>
+
+      <section id="stringtobits">
+        <p>Normally, SHA-3 is defined as a function whose input and output are an array of bits. Since our input is a string, first we must translate the string into an array of bits. There are many different encodings, but the most widely used one is <span class="important1">UTF-8</span>. First we get the bytes of each letter:</p>
+        <div class="breakdowndiv">
+          <table class="breakdown"></table>
+        </div>
+        <p>Next, we combine the bytes such that the LSB bits of each byte (rightmost ones) comes first. </p>
+        <div class="breakdowndiv">
+          <table class="breakdown"></table>
+        </div>
+      </section>
+
+      <section id="bytestobits">
+        <p>Let's first turn the nibbles (0-f) and bits to binary. Then combine everything together.</p>
+        <div class="breakdowndiv">
+          <table class="breakdown"></table>
+        </div>
+        <p>Note that normally bytes are combined such that LSB bits of each byte (rightmost one) comes first, but here we combine nibbles MSB-first, which produces different results.</p>
+      </section>
+
+      <section id="filetobits">
+        <p>Files are like a sequence of bytes. First, we get all the bytes in the file, and write them in terms of bits.</p>
+        <div class="breakdowndiv">
+          <table class="breakdown"></table>
+        </div>
+        <p>Next, we combine the bytes such that the LSB bits of each byte (rightmost ones) comes first. </p>
+        <div class="breakdowndiv">
+          <table class="breakdown"></table>
+        </div>
+      </section>
+
+      <p>Note that it's okay to have obtained no bits at this point. This happens when an empty string is input, or a file is empty.</p>
+
+      
+      <section id="paddingsection">
+        <h3>Padding the bits and splitting in blocks</h3>
+
+        <p>Padding is the process of adding redundant bits to an array to make it satisfy a certain condition. For SHA-3, the general procedure is as follows:</p>
+
+        <p class="math">bits + (<span class="important1">01</span> or <span class="important1">1111</span>) + <span class="important1">1</span> + n zeros + <span class="important1">1</span></p>
+
+        <ul>
+          <li>Start with the bit array we got earlier.</li>
+          <li>If the SHA-3 variant we chose is shake128 or shake256, append <span class="important1">1111</span>; otherwise, append <span class="important1">01</span>.</li>
+          <li>Append 1.</li>
+          <li>Append zeros until the resulting length is a multiple of r. The values of r are listed below.</li>
+          <li>Append 1.</li>
+        </ul>
+        
+
+        <table class="normaltable">
+          <thead>
+            <td>SHA-3 variant</td>
+            <td>r (rate)</td>
+          </thead>
+          <tbody>
+            <tr>
+              <td>sha3-224</td>
+              <td>1152 bits</td>
+            </tr>
+            <tr>
+              <td>sha3-256</td>
+              <td>1088 bits</td>
+            </tr>
+            <tr>
+              <td>sha3-384</td>
+              <td>832 bits</td>
+            </tr>
+            <tr>
+              <td>sha3-512</td>
+              <td>576 bits</td>
+            </tr>
+            <tr>
+              <td>shake128</td>
+              <td>1344 bits</td>
+            </tr>
+            <tr>
+              <td>shake256</td>
+              <td>1088 bits</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p>In order to find out how many zeros to put, we do</p>
+
+        <div id="howmanyzerostoput">
+          <table class="mathtable">
+            <tbody>
+              <tr>
+                <td></td>
+                <td>length(bits)</td>
+                <td>+</td>
+                <td>length(01 or 1111)</td>
+                <td>+</td>
+                <td>length(1)</td>
+                <td>+</td>
+                <td>length(n zeros)</td>
+                <td>+</td>
+                <td>length(1)</td>
+              </tr>
+              <tr>
+                <td>=</td>
+                <td class="fillin"></td>
+                <td>+</td>
+                <td class="fillin"></td>
+                <td>+</td>
+                <td>1</td>
+                <td>+</td>
+                <td>n</td>
+                <td>+</td>
+                <td>1</td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+
+        <p class="math">= <span class="fillin"></span> + n</p>
+        <p>Now we should find the smallest n that satisfies the following:</p>
+        <p class="math">
+          ( <span class="fillin"></span> + n ) is a multiple of <span class="fillin"></span>
+        </p>
+        <p class="math">n = <span class="fillin"></span> zeros</p>
+        
+        <p>Once we do the padding as explained above, we end up with a bit array whose length is divisible by r=<span class="fillin"></span>. Now we can split the array in r-bit-long blocks. The blocks are listed below. Padding bits are shown in green.</p>
+
+        <ol id="blocksafterpadding">
+        </ol>
+
+      </section>
+
+      <section id="introtostate">
+        <h3>Introduction to the State</h3>
+
+        <p>Other than the input blocks, we also have <span class="important1">the state</span>. The state is a series of 1600 bits that we will use as our scratchpad to calculate the hash. Initially, all 1600 bits are set to 0. Throughout this guide, the states will be shown as <span class="important2">25 lanes</span> by <span class="important2">64 slices</span>. The initial state:</p>
+
+        <!-- <div class="stateTransitionContainer">
+          <ol class="state" id="emptystate">
+          </ol>
+          <span class="arrow">➔</span>
+          <ol class="state" id="emptystate2">
+          </ol>
+        </div> -->
+
+        <div class="stateContainer">
+        <ol class="state hidecursor" id="emptystate"></ol>
+          <p>
+            <span class="greencolor fillin"></span>
+            <span class="goldcolor fillin"></span>
+            <span class="redcolor fillin"></span>
+          </p>
+        </div>
+      </section>
+
+      <section id="absorbingphase">
+        <h3>Absorbing Phase</h3>
+        <p>
+          Now that we have our <span class="fillin"></span> input block(s) and our state (initially all zeros), we can proceed to <span class="important1">the absorbing phase</span> of the calculations. Absorbing phase can be summarized as:
+        </p>
+        <ul>
+          <li>
+            For each input block:
+            <ul>
+              <li>Xor(state, input block)</li>
+              <li>
+                For 24 rounds:
+                <ul>
+                  <li>Theta(state)</li>
+                  <li>Rho(state)</li>
+                  <li>Pi(state)</li>
+                  <li>Chi(state)</li>
+                  <li>Iota(state, round)</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+
+        <p>
+          Tip: Hover over each bit in the resulting state to see how it's calculated.
+        </p>
+
+        <p id="absorbphasecontroller">
+          Input block <select id="absorbBlockSelector">
+
+          </select>
+          , step
+          <select id="absorbFnSelector">
+            <option value="0">Xor </option>
+            <option value="1">Theta (round 1)</option>
+            <option value="2">Rho (round 1)</option>
+            <option value="3">Pi (round 1)</option>
+            <option value="4">Chi (round 1)</option>
+            <option value="5">Iota (round 1)</option>
+            <option value="6">Theta (round 2)</option>
+            <option value="7">Rho (round 2)</option>
+            <option value="8">Pi (round 2)</option>
+            <option value="9">Chi (round 2)</option>
+            <option value="10">Iota (round 2)</option>
+            <option value="11">Theta (round 3)</option>
+            <option value="12">Rho (round 3)</option>
+            <option value="13">Pi (round 3)</option>
+            <option value="14">Chi (round 3)</option>
+            <option value="15">Iota (round 3)</option>
+            <option value="16">Theta (round 4)</option>
+            <option value="17">Rho (round 4)</option>
+            <option value="18">Pi (round 4)</option>
+            <option value="19">Chi (round 4)</option>
+            <option value="20">Iota (round 4)</option>
+            <option value="21">Theta (round 5)</option>
+            <option value="22">Rho (round 5)</option>
+            <option value="23">Pi (round 5)</option>
+            <option value="24">Chi (round 5)</option>
+            <option value="25">Iota (round 5)</option>
+            <option value="26">Theta (round 6)</option>
+            <option value="27">Rho (round 6)</option>
+            <option value="28">Pi (round 6)</option>
+            <option value="29">Chi (round 6)</option>
+            <option value="30">Iota (round 6)</option>
+            <option value="31">Theta (round 7)</option>
+            <option value="32">Rho (round 7)</option>
+            <option value="33">Pi (round 7)</option>
+            <option value="34">Chi (round 7)</option>
+            <option value="35">Iota (round 7)</option>
+            <option value="36">Theta (round 8)</option>
+            <option value="37">Rho (round 8)</option>
+            <option value="38">Pi (round 8)</option>
+            <option value="39">Chi (round 8)</option>
+            <option value="40">Iota (round 8)</option>
+            <option value="41">Theta (round 9)</option>
+            <option value="42">Rho (round 9)</option>
+            <option value="43">Pi (round 9)</option>
+            <option value="44">Chi (round 9)</option>
+            <option value="45">Iota (round 9)</option>
+            <option value="46">Theta (round 10)</option>
+            <option value="47">Rho (round 10)</option>
+            <option value="48">Pi (round 10)</option>
+            <option value="49">Chi (round 10)</option>
+            <option value="50">Iota (round 10)</option>
+            <option value="51">Theta (round 11)</option>
+            <option value="52">Rho (round 11)</option>
+            <option value="53">Pi (round 11)</option>
+            <option value="54">Chi (round 11)</option>
+            <option value="55">Iota (round 11)</option>
+            <option value="56">Theta (round 12)</option>
+            <option value="57">Rho (round 12)</option>
+            <option value="58">Pi (round 12)</option>
+            <option value="59">Chi (round 12)</option>
+            <option value="60">Iota (round 12)</option>
+            <option value="61">Theta (round 13)</option>
+            <option value="62">Rho (round 13)</option>
+            <option value="63">Pi (round 13)</option>
+            <option value="64">Chi (round 13)</option>
+            <option value="65">Iota (round 13)</option>
+            <option value="66">Theta (round 14)</option>
+            <option value="67">Rho (round 14)</option>
+            <option value="68">Pi (round 14)</option>
+            <option value="69">Chi (round 14)</option>
+            <option value="70">Iota (round 14)</option>
+            <option value="71">Theta (round 15)</option>
+            <option value="72">Rho (round 15)</option>
+            <option value="73">Pi (round 15)</option>
+            <option value="74">Chi (round 15)</option>
+            <option value="75">Iota (round 15)</option>
+            <option value="76">Theta (round 16)</option>
+            <option value="77">Rho (round 16)</option>
+            <option value="78">Pi (round 16)</option>
+            <option value="79">Chi (round 16)</option>
+            <option value="80">Iota (round 16)</option>
+            <option value="81">Theta (round 17)</option>
+            <option value="82">Rho (round 17)</option>
+            <option value="83">Pi (round 17)</option>
+            <option value="84">Chi (round 17)</option>
+            <option value="85">Iota (round 17)</option>
+            <option value="86">Theta (round 18)</option>
+            <option value="87">Rho (round 18)</option>
+            <option value="88">Pi (round 18)</option>
+            <option value="89">Chi (round 18)</option>
+            <option value="90">Iota (round 18)</option>
+            <option value="91">Theta (round 19)</option>
+            <option value="92">Rho (round 19)</option>
+            <option value="93">Pi (round 19)</option>
+            <option value="94">Chi (round 19)</option>
+            <option value="95">Iota (round 19)</option>
+            <option value="96">Theta (round 20)</option>
+            <option value="97">Rho (round 20)</option>
+            <option value="98">Pi (round 20)</option>
+            <option value="99">Chi (round 20)</option>
+            <option value="100">Iota (round 20)</option>
+            <option value="101">Theta (round 21)</option>
+            <option value="102">Rho (round 21)</option>
+            <option value="103">Pi (round 21)</option>
+            <option value="104">Chi (round 21)</option>
+            <option value="105">Iota (round 21)</option>
+            <option value="106">Theta (round 22)</option>
+            <option value="107">Rho (round 22)</option>
+            <option value="108">Pi (round 22)</option>
+            <option value="109">Chi (round 22)</option>
+            <option value="110">Iota (round 22)</option>
+            <option value="111">Theta (round 23)</option>
+            <option value="112">Rho (round 23)</option>
+            <option value="113">Pi (round 23)</option>
+            <option value="114">Chi (round 23)</option>
+            <option value="115">Iota (round 23)</option>
+            <option value="116">Theta (round 24)</option>
+            <option value="117">Rho (round 24)</option>
+            <option value="118">Pi (round 24)</option>
+            <option value="119">Chi (round 24)</option>
+            <option value="120">Iota (round 24)</option>
+          </select>.
+
+          <button id="absorbprev">Prev</button>
+          <button id="absorbnext">Next</button>
+
+        </p>
+
+        <section id="absorbXorStep">
+          <p>
+            In the Xor step, we xor bits of the current input block and the state, from the first bit onwards. The state is always longer than the input block, so the last few bits will remain unchanged. The input block:
+          </p>
+          <div class="stateTransitionContainer">
+            <div id="absorbXorInputBlock"></div>
+            <br>
+            <div>
+              <p class="stateDescription">The state before:</p>
+              <ol class="state">
+              </ol>
+            </div>
+            <div>
+              <p class="stateDescription">The state after:</p>
+              <ol class="state hidecursor">
+              </ol>
+            </div>
+          </div>
+          <p class="fillin"></p>
+        </section>
+        <section id="absorbThetaStep">
+          <p>
+            In the Theta step, 5 bits from the same slice, 5 bits from the neighboring slice and the original bit are all xor'ed together. An easier way to reason about this is to sum up the highlighted bits, and see if the result is odd.
+          </p>
+          <div class="stateTransitionContainer">
+            <div>
+              <p class="stateDescription">The state before:</p>
+              <ol class="state">
+              </ol>
+            </div>
+            <div>
+              <p class="stateDescription">The state after:</p>
+              <ol class="state hidecursor">
+              </ol>
+            </div>
+          </div>
+          <p class="fillin"></p>
+        </section>
+        <section id="absorbRhoStep">
+          <p>
+            In the Rho step, the selected lane is rotated to the right by a certain amount, which depends on which lane it is. The amount of rotation is 0, 1, 62, 28, 27, 36, 44, 6, 55, 20, 3, 10, 43, 25, 39, 41, 45, 15, 21, 8, 18, 2, 61, 56, 14, respectively.
+          </p>
+          <div class="stateTransitionContainer">
+            <div>
+              <p class="stateDescription">The state before:</p>
+              <ol class="state">
+              </ol>
+            </div>
+            <div>
+              <p class="stateDescription">The state after:</p>
+              <ol class="state hidecursor">
+              </ol>
+            </div>
+          </div>
+          <p class="fillin"></p>
+        </section>
+        <section id="absorbPiStep">
+          <p>
+            In the Pi step, lanes are reordered. The new orders of the lanes are 1, 7, 13, 19, 25, 4, 10, 11, 17, 23, 2, 8, 14, 20, 21, 5, 6, 12, 18, 24, 3, 9, 15, 16, 22, respectively. That is, the first lane remains in its spot, while the second lane becomes the 7th lane, and so on.
+          </p>
+          <div class="stateTransitionContainer">
+            <div>
+              <p class="stateDescription">The state before:</p>
+              <ol class="state">
+              </ol>
+            </div>
+            <div>
+              <p class="stateDescription">The state after:</p>
+              <ol class="state hidecursor">
+              </ol>
+            </div>
+          </div>
+          <p class="fillin"></p>
+        </section>
+        <section id="absorbChiStep">
+          <p>
+            In the Chi step, first we divide the state into 5-lane groups, then pick the selected bit and two bits beneath it in the same group. The result is calculated according to <span class="greencolor">green</span> xor ( (not <span class="goldcolor">yellow</span>) and <span class="redcolor">red</span> ).
+          </p>
+          <div class="stateTransitionContainer">
+            <div>
+              <p class="stateDescription">The state before:</p>
+              <ol class="state">
+              </ol>
+            </div>
+            <div>
+              <p class="stateDescription">The state after:</p>
+              <ol class="state hidecursor">
+              </ol>
+            </div>
+          </div>
+          <p class="fillin"></p>
+        </section>
+        <section id="absorbIotaStep">
+          <p>
+            In the Iota step, only the first lane is changed, while the rest is untouched. The bits of the first lane are xor'ed with a constant, which is given below. Note that the constant that's used depends on the round.
+          </p>
+          <div class="stateTransitionContainer">
+            <ol id="absorbIotaRoundConst"></ol>
+            <br>
+            <div>
+              <p class="stateDescription">The state before:</p>
+              <ol class="state">
+              </ol>
+            </div>
+            <div>
+              <p class="stateDescription">The state after:</p>
+              <ol class="state hidecursor">
+              </ol>
+            </div>
+          </div>
+          <p class="fillin"></p>
+        </section>
+      </section>
+
+
+      <section id="nonshakesqueezingphase">
+        <h3>Squeezing Phase</h3>
+        <p>
+          For non-shake variants, the squeezing part is pretty simple. First,  take the first d bits out of the final state. Group the bits as 8-bit bytes. The values of d are given below:
+        </p>
+
+        <table class="normaltable">
+          <thead>
+            <td>SHA-3 variant</td>
+            <td>d (output)</td>
+          </thead>
+          <tbody>
+            <tr>
+              <td>sha3-224</td>
+              <td>224 bits</td>
+            </tr>
+            <tr>
+              <td>sha3-256</td>
+              <td>256 bits</td>
+            </tr>
+            <tr>
+              <td>sha3-384</td>
+              <td>384 bits</td>
+            </tr>
+            <tr>
+              <td>sha3-512</td>
+              <td>512 bits</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p class="stateDescription">The final state:</p>
+        <ol class="state"></ol>
+
+        <p>
+          Finally, reverse the bits in each 8-bit group, so that the leftmost bits become rightmost ones, and vice versa.
+        </p>
+
+        <p class="eightbitgroups"></p>
+        <p>We can also write it in hex notation:</p>
+        <p class="result"></p>
+        <p>And that's our final result!</p>
+      </section>
+
+      <section id="squeezingphase">
+        <h3>Squeezing Phase</h3>
+        <p>
+          For the shake128 and shake256 variants, we do the following:
+        </p>
+
+        <ul>
+          <li>Let arr be an empty array of bits.</li>
+          <li>Repeat as necessary:</li>
+          <ul>
+            <li>Append the first r bits of the state to arr. Stop if arr is long enough.</li>
+            <li>
+              For 24 rounds:
+              <ul>
+                <li>Theta(state)</li>
+                <li>Rho(state)</li>
+                <li>Pi(state)</li>
+                <li>Chi(state)</li>
+                <li>Iota(state, round)</li>
+              </ul>
+            </li>
+          </ul>
+        </ul>
+
+        <p>The length of the output is fixed for non-shake variants of SHA-3, whereas for shake128 and shake256, the output length (d) is determined by the user. In our case, you chose it to be <span class="fillin"></span> <a href="#input">up here.</a> The value of r is fixed and is defined as:</p>
+
+        <table class="normaltable">
+          <thead>
+            <td>SHA-3 variant</td>
+            <td>r (rate)</td>
+          </thead>
+          <tbody>
+            <tr>
+              <td>shake128</td>
+              <td>1344 bits</td>
+            </tr>
+            <tr>
+              <td>shake256</td>
+              <td>1088 bits</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p id="squeezephasecontroller">
+          Output block <select id="squeezeBlockSelector">
+        
+          </select>
+          , step
+          <select id="squeezeFnSelector">
+            <option value="0">Take out bits</option>
+            <option value="1">Theta (round 1)</option>
+            <option value="2">Rho (round 1)</option>
+            <option value="3">Pi (round 1)</option>
+            <option value="4">Chi (round 1)</option>
+            <option value="5">Iota (round 1)</option>
+            <option value="6">Theta (round 2)</option>
+            <option value="7">Rho (round 2)</option>
+            <option value="8">Pi (round 2)</option>
+            <option value="9">Chi (round 2)</option>
+            <option value="10">Iota (round 2)</option>
+            <option value="11">Theta (round 3)</option>
+            <option value="12">Rho (round 3)</option>
+            <option value="13">Pi (round 3)</option>
+            <option value="14">Chi (round 3)</option>
+            <option value="15">Iota (round 3)</option>
+            <option value="16">Theta (round 4)</option>
+            <option value="17">Rho (round 4)</option>
+            <option value="18">Pi (round 4)</option>
+            <option value="19">Chi (round 4)</option>
+            <option value="20">Iota (round 4)</option>
+            <option value="21">Theta (round 5)</option>
+            <option value="22">Rho (round 5)</option>
+            <option value="23">Pi (round 5)</option>
+            <option value="24">Chi (round 5)</option>
+            <option value="25">Iota (round 5)</option>
+            <option value="26">Theta (round 6)</option>
+            <option value="27">Rho (round 6)</option>
+            <option value="28">Pi (round 6)</option>
+            <option value="29">Chi (round 6)</option>
+            <option value="30">Iota (round 6)</option>
+            <option value="31">Theta (round 7)</option>
+            <option value="32">Rho (round 7)</option>
+            <option value="33">Pi (round 7)</option>
+            <option value="34">Chi (round 7)</option>
+            <option value="35">Iota (round 7)</option>
+            <option value="36">Theta (round 8)</option>
+            <option value="37">Rho (round 8)</option>
+            <option value="38">Pi (round 8)</option>
+            <option value="39">Chi (round 8)</option>
+            <option value="40">Iota (round 8)</option>
+            <option value="41">Theta (round 9)</option>
+            <option value="42">Rho (round 9)</option>
+            <option value="43">Pi (round 9)</option>
+            <option value="44">Chi (round 9)</option>
+            <option value="45">Iota (round 9)</option>
+            <option value="46">Theta (round 10)</option>
+            <option value="47">Rho (round 10)</option>
+            <option value="48">Pi (round 10)</option>
+            <option value="49">Chi (round 10)</option>
+            <option value="50">Iota (round 10)</option>
+            <option value="51">Theta (round 11)</option>
+            <option value="52">Rho (round 11)</option>
+            <option value="53">Pi (round 11)</option>
+            <option value="54">Chi (round 11)</option>
+            <option value="55">Iota (round 11)</option>
+            <option value="56">Theta (round 12)</option>
+            <option value="57">Rho (round 12)</option>
+            <option value="58">Pi (round 12)</option>
+            <option value="59">Chi (round 12)</option>
+            <option value="60">Iota (round 12)</option>
+            <option value="61">Theta (round 13)</option>
+            <option value="62">Rho (round 13)</option>
+            <option value="63">Pi (round 13)</option>
+            <option value="64">Chi (round 13)</option>
+            <option value="65">Iota (round 13)</option>
+            <option value="66">Theta (round 14)</option>
+            <option value="67">Rho (round 14)</option>
+            <option value="68">Pi (round 14)</option>
+            <option value="69">Chi (round 14)</option>
+            <option value="70">Iota (round 14)</option>
+            <option value="71">Theta (round 15)</option>
+            <option value="72">Rho (round 15)</option>
+            <option value="73">Pi (round 15)</option>
+            <option value="74">Chi (round 15)</option>
+            <option value="75">Iota (round 15)</option>
+            <option value="76">Theta (round 16)</option>
+            <option value="77">Rho (round 16)</option>
+            <option value="78">Pi (round 16)</option>
+            <option value="79">Chi (round 16)</option>
+            <option value="80">Iota (round 16)</option>
+            <option value="81">Theta (round 17)</option>
+            <option value="82">Rho (round 17)</option>
+            <option value="83">Pi (round 17)</option>
+            <option value="84">Chi (round 17)</option>
+            <option value="85">Iota (round 17)</option>
+            <option value="86">Theta (round 18)</option>
+            <option value="87">Rho (round 18)</option>
+            <option value="88">Pi (round 18)</option>
+            <option value="89">Chi (round 18)</option>
+            <option value="90">Iota (round 18)</option>
+            <option value="91">Theta (round 19)</option>
+            <option value="92">Rho (round 19)</option>
+            <option value="93">Pi (round 19)</option>
+            <option value="94">Chi (round 19)</option>
+            <option value="95">Iota (round 19)</option>
+            <option value="96">Theta (round 20)</option>
+            <option value="97">Rho (round 20)</option>
+            <option value="98">Pi (round 20)</option>
+            <option value="99">Chi (round 20)</option>
+            <option value="100">Iota (round 20)</option>
+            <option value="101">Theta (round 21)</option>
+            <option value="102">Rho (round 21)</option>
+            <option value="103">Pi (round 21)</option>
+            <option value="104">Chi (round 21)</option>
+            <option value="105">Iota (round 21)</option>
+            <option value="106">Theta (round 22)</option>
+            <option value="107">Rho (round 22)</option>
+            <option value="108">Pi (round 22)</option>
+            <option value="109">Chi (round 22)</option>
+            <option value="110">Iota (round 22)</option>
+            <option value="111">Theta (round 23)</option>
+            <option value="112">Rho (round 23)</option>
+            <option value="113">Pi (round 23)</option>
+            <option value="114">Chi (round 23)</option>
+            <option value="115">Iota (round 23)</option>
+            <option value="116">Theta (round 24)</option>
+            <option value="117">Rho (round 24)</option>
+            <option value="118">Pi (round 24)</option>
+            <option value="119">Chi (round 24)</option>
+            <option value="120">Iota (round 24)</option>
+          </select>.
+        
+          <button id="squeezeprev">Prev</button>
+          <button id="squeezenext">Next</button>
+        </p>
+        
+        <section id="squeezeTakeStep">
+          <p>
+            In the Take step, we take the first r bits (for <span class="fillin"></span> it's <span class="fillin"></span>) and append them to the output array. The size of output array has grown from <span class="fillin"></span> to <span class="fillin"></span>. The state remains unchanged.
+          </p>
+          <p class="nonfinalstep">
+            The size of the output array hasn't reached our desired size yet (d=<span class="fillin"></span> bits), so we proceed with the Theta-Rho-Pi-Chi-Iota steps.
+          </p>
+          <p class="finalstep">
+            The size of the output array has reached and passed our desired size (d=<span class="fillin"></span> bits), so we don't need to do the Theta-Rho-Pi-Chi-Iota steps anymore. We remove the extra <span class="fillin"></span>-<span class="fillin"></span>=<span class="fillin"></span> bits.
+          </p>
+          
+          <div class="stateTransitionContainer">
+            <div>
+              <p class="stateDescription">The state:</p>
+              <ol class="state">
+              </ol>
+            </div>
+            <div style="display: none;">
+              <p class="stateDescription">The state after:</p>
+              <ol class="state hidecursor">
+              </ol>
+            </div>
+          </div>
+          <p class="fillin"></p>
+        </section>
+        <section id="squeezeThetaStep">
+          <p>
+            In the Theta step, 5 bits from the same slice, 5 bits from the neighboring slice and the original bit are all xor'ed together. An easier way to reason about this is to sum up the highlighted bits, and see if the result is odd.
+          </p>
+          <div class="stateTransitionContainer">
+            <div>
+              <p class="stateDescription">The state before:</p>
+              <ol class="state">
+              </ol>
+            </div>
+            <div>
+              <p class="stateDescription">The state after:</p>
+              <ol class="state hidecursor">
+              </ol>
+            </div>
+          </div>
+          <p class="fillin"></p>
+        </section>
+        <section id="squeezeRhoStep">
+          <p>
+            In the Rho step, the selected lane is rotated to the right by a certain amount, which depends on which lane it is. The amount of rotation is 0, 1, 62, 28, 27, 36, 44, 6, 55, 20, 3, 10, 43, 25, 39, 41, 45, 15, 21, 8, 18, 2, 61, 56, 14, respectively.
+          </p>
+          <div class="stateTransitionContainer">
+            <div>
+              <p class="stateDescription">The state before:</p>
+              <ol class="state">
+              </ol>
+            </div>
+            <div>
+              <p class="stateDescription">The state after:</p>
+              <ol class="state hidecursor">
+              </ol>
+            </div>
+          </div>
+          <p class="fillin"></p>
+        </section>
+        <section id="squeezePiStep">
+          <p>
+            In the Pi step, lanes are reordered. The new orders of the lanes are 1, 7, 13, 19, 25, 4, 10, 11, 17, 23, 2, 8, 14, 20, 21, 5, 6, 12, 18, 24, 3, 9, 15, 16, 22, respectively. That is, the first lane remains in its spot, while the second lane becomes the 7th lane, and so on.
+          </p>
+          <div class="stateTransitionContainer">
+            <div>
+              <p class="stateDescription">The state before:</p>
+              <ol class="state">
+              </ol>
+            </div>
+            <div>
+              <p class="stateDescription">The state after:</p>
+              <ol class="state hidecursor">
+              </ol>
+            </div>
+          </div>
+          <p class="fillin"></p>
+        </section>
+        <section id="squeezeChiStep">
+          <p>
+            In the Chi step, first we divide the state into 5-lane groups, then pick the selected bit and two bits beneath it in the same group. The result is calculated according to <span class="greencolor">green</span> xor ( (not <span class="goldcolor">yellow</span>) and <span class="redcolor">red</span> ).
+          </p>
+          <div class="stateTransitionContainer">
+            <div>
+              <p class="stateDescription">The state before:</p>
+              <ol class="state">
+              </ol>
+            </div>
+            <div>
+              <p class="stateDescription">The state after:</p>
+              <ol class="state hidecursor">
+              </ol>
+            </div>
+          </div>
+          <p class="fillin"></p>
+        </section>
+        <section id="squeezeIotaStep">
+          <p>
+            In the Iota step, only the first lane is changed, while the rest is untouched. The bits of the first lane are xor'ed with a constant, which is given below. Note that the constant that's used depends on the round.
+          </p>
+          <div class="stateTransitionContainer">
+            <ol id="squeezeIotaRoundConst"></ol>
+            <br>
+            <div>
+              <p class="stateDescription">The state before:</p>
+              <ol class="state">
+              </ol>
+            </div>
+            <div>
+              <p class="stateDescription">The state after:</p>
+              <ol class="state hidecursor">
+              </ol>
+            </div>
+          </div>
+          <p class="fillin"></p>
+        </section>
+
+        <p class="aBitOfMarginHere">
+          Here are all the bits we obtained in the last step:
+        </p>
+        <p class="eightbitgroups"></p>
+        <p>
+          Finally, reverse the bits in each 8-bit group, so that the leftmost bits become rightmost ones, and vice versa.
+        </p>
+        <p class="eightbitgroupsreverse"></p>
+        <p>We can also write it in hex notation:</p>
+        <p class="result"></p>
+        <p>And that's our final result!</p>
+      </section>
+        
+
+    </section>
+
+
+  <script type="module">
+
+    import lib from './libsha3.js'
+
+    let elQaSections = document.querySelectorAll('.qa')
+    for (let i = 0; i<elQaSections.length; i++) {
+      elQaSections[i].onclick = () => elQaSections[i].classList.toggle('expanded')
+    }
+
+    // state:
+    /*
+      {
+        flavor: 'sha3-256',
+        xofLength: 345,
+        inputMethod: 'string', 'file', 'bytes',
+        inputString: '...',
+        error: 'this n that occured'
+      }
+    */
+
+    let state = {
+      flavor: 'sha3-256',
+      xofLength: 256, // up to 10^7
+      inputMethod: 'string', // string, file, bytes
+      inputString: 'Hello world!',
+      xofError: '',
+      inputError: '',
+      absorbFnView: 0, // starts at 0
+      absorbBlockView: 0, // starts at 0
+      squeezeFnView: 0, // starts at 0
+      squeezeBlockView: 0 // starts at 0
+    }
+
+    window.onload = () => {
+      resetView()
+      updatePage()
+    }
+
+    window.state= state
+
+    let elFlavorSelector = document.getElementById('flavorSelector')
+    let elShakePart = document.getElementById('shakePart')
+    let elShakeLength = document.querySelector('#shakePart .shakeLength')
+
+    elShakePart.style.display = 'none'
+    elShakeLength.classList.add('noError')
+    elShakeLength.value = '256'
+
+    elFlavorSelector.value = 'sha3-256'
+    elFlavorSelector.onchange = function() {
+      state.flavor = this.value
+      state.absorbFnView = 0
+      state.absorbBlockView = 0
+      state.squeezeFnView = 0
+      state.squeezeBlockView = 0
+      if (state.flavor!='shake128' && state.flavor!='shake256') {
+        state.xofError = ''
+        state.xofLength = 256
+        elShakeLength.value = '256'
+      }
+      updatePage()
+    }
+
+    elShakeLength.oninput = function() {
+      let val = this.value.trim()
+      if (!val) {
+        state.xofError = 'Error: Shake128 and shake256 require a non-empty bit-length. You provided an empty string.'
+      }
+      else if (Number(val)==NaN) {
+        state.xofError = 'Error: Shake128 and shake256 require a non-empty bit-length. The value should be a number.'
+      }
+      else if (Number(val)==0 || Number(val)==-0 || (val)==Infinity || Number(val)==-Infinity || !Number.isInteger( Number(val) ) || Number(val)<0 ) {
+        state.xofError = 'Error: Shake128 and shake256 require a non-empty bit-length. The value should be a positive integer.'
+      }
+      else if (Number(val) > 10**4) {
+        state.xofError = 'Error: Shake128 and shake256 bit-length should be less than 10^4. Values above this limit are possible, but are not supported by this website.'
+      }
+      else if (Number(val) % 8) {
+        state.xofError = 'Error: Shake128 and shake256 bit-length should be a multiple of 8, so that the output can be represented as bytes.'
+      }
+      else {
+        state.xofError = ''
+        state.xofLength = val
+        state.absorbFnView = 0
+        state.absorbBlockView = 0
+        state.squeezeFnView = 0
+        state.squeezeBlockView = 0
+      }
+
+      // shake length change doesnt matter for absorbing stage
+      updatePage()
+    }
+
+    let elImSelector = document.getElementById('imSelector')
+    elImSelector.value = 'string'
+    elImSelector.onchange = function(ev) {
+      state.inputMethod = this.value
+      state.inputString = ''
+      state.inputError = ''
+      state.absorbFnView = 0
+      state.absorbBlockView = 0
+      state.squeezeFnView = 0
+      state.squeezeBlockView = 0
+      elStringInput.value = ''
+      elBitsnBytesInput.value = ''
+      elFileInput.value = ''
+      if (state.inputMethod=='file') state.inputError = 'Error: No files provided yet.'
+      updatePage()
+    }
+
+
+    let elStringInput = document.getElementById('stringInput')
+    elStringInput.oninput = function () {
+      if (this.value.length > 10**4) {
+        state.inputError = `Error: Input is too long. Max allowed length is 10^4 characters. Values above this limit are possible, but are not supported by this website.`
+        updatePage()
+        return
+      }
+      state.inputString = this.value
+      state.inputError = ''
+      state.absorbFnView = 0
+      state.absorbBlockView = 0
+      state.squeezeFnView = 0
+      state.squeezeBlockView = 0
+      updatePage()
+    }
+
+    let elBitsnBytesInput = document.getElementById('bitsnbytesInput')
+    elBitsnBytesInput.oninput = function () {
+      let val = this.value
+      state.inputString = this.value
+      state.absorbFnView = 0
+      state.absorbBlockView = 0
+      state.squeezeFnView = 0
+      state.squeezeBlockView = 0
+      if ( /[^0-9a-fA-F+\-\s]/g.test(val) ) { // error
+        let badChar = val.split('').filter(a => /[^0-9a-fA-F+\-\s]/g.test(a) )[0]
+        state.inputError = `Error: Input should consist of hex digits (0-9, a-f, A-F), pluses and minuses (+, -), and whitespace. Your input contains: ${badChar}.`
+      }
+      else if (val.length > 10**4) {
+        state.inputError = `Error: Input is too long. Max allowed length is 10^4 characters. Values above this limit are possible, but are not supported by this website.`
+      }
+      else {
+        state.inputError = ''
+      }
+
+      updatePage()
+    }
+
+
+    let elFileInput = document.getElementById('fileInput')
+    elFileInput.ondrop = function(ev) {
+      ev.preventDefault()
+      this.classList.remove('entered')
+      let files = ev.dataTransfer.files
+      if (files.length==0) return
+      if (files.length > 1) {
+        state.inputString = ''
+        state.inputError = 'Error: You provided multiple files. Please provide only a single file.'
+        updatePage()
+        return
+      }
+      
+      // 1 file
+      state.inputString = ''
+      let file = ev.dataTransfer.files[0]
+      if (file.size > 10**4) {
+        state.inputString = ''
+        state.inputError = 'Error: The provided file is too large. Max allowed size is 10^4 bytes (~10kb). Values above this limit are possible, but are not supported by this website.'
+        updatePage()
+        return
+      }
+
+      let reader = new FileReader()
+      reader.readAsArrayBuffer(file)
+      reader.onload = () => {
+        let bytes = Array.from(new Uint8Array(reader.result)).map(b => b.toString(16).padStart(2,'0')).join(' ')
+
+        state.inputString = `Uploaded file (${file.size} bytes): ${bytes}`
+        state.inputError = ''
+        state.absorbFnView = 0
+        state.absorbBlockView = 0
+        state.squeezeFnView = 0
+        state.squeezeBlockView = 0
+        updatePage()          
+      }
+    }
+      
+    
+
+    elFileInput.ondragover = function(ev) {
+      ev.preventDefault()
+    }
+
+    elFileInput.ondragenter = function(ev) {
+      this.classList.add('entered')
+    }
+
+    elFileInput.ondragleave = function(ev) {
+      this.classList.remove('entered')
+    }
+
+    let elInputErrorMsg = document.getElementById('inputErrorMsg')
+
+    let elInvisibleFileInput = document.getElementById('invisibleFileInput')
+    elFileInput.onclick = () => {
+      elInvisibleFileInput.click()
+    }
+    elInvisibleFileInput.oninput = () => {
+      let files = elInvisibleFileInput.files
+      if (files.length==0) return
+      if (files.length > 1) {
+        state.inputString = ''
+        state.inputError = 'Error: You provided multiple files. Please provide only a single file.'
+        updatePage()
+        return
+      }
+      
+      // 1 file
+      state.inputString = ''
+      let file = elInvisibleFileInput.files[0]
+      if (file.size > 10**4) {
+        state.inputString = ''
+        state.inputError = 'Error: The provided file is too large. Max allowed size is 10^4 bytes (~10kb). Values above this limit are possible, but are not supported by this website.'
+        updatePage()
+        return
+      }
+
+      let reader = new FileReader()
+      reader.readAsArrayBuffer(file)
+      reader.onload = () => {
+        let bytes = Array.from(new Uint8Array(reader.result)).map(b => b.toString(16).padStart(2,'0')).join(' ')
+        state.inputString = `Uploaded file (${file.size} bytes): ${bytes}`
+        state.inputError = ''
+        state.absorbFnView = 0
+        state.absorbBlockView = 0
+        state.squeezeFnView = 0
+        state.squeezeBlockView = 0
+        updatePage()          
+      }
+      
+      state.absorbFnView = 0
+      state.absorbBlockView = 0
+      state.squeezeFnView = 0
+      state.squeezeBlockView = 0
+      updatePage()
+    }
+
+
+    let elAbsorbBlockSelector = document.getElementById('absorbBlockSelector')
+    elAbsorbBlockSelector.onchange = function(ev) {
+      state.absorbBlockView = Number(this.value)
+      updatePage()
+    }
+
+    let elAbsorbFnSelector = document.getElementById('absorbFnSelector')
+    elAbsorbFnSelector.onchange = function(ev) {
+      state.absorbFnView = Number(this.value)
+      updatePage()
+    }
+
+    let elSqueezeBlockSelector = document.getElementById('squeezeBlockSelector')
+    elSqueezeBlockSelector.onchange = function(ev) {
+      state.squeezeBlockView = Number(this.value)
+      updatePage()
+    }
+
+    let elSqueezeFnSelector = document.getElementById('squeezeFnSelector')
+    elSqueezeFnSelector.onchange = function(ev) {
+      state.squeezeFnView = Number(this.value)
+      updatePage()
+    }
+
+    let elSolution = document.getElementById('solution')
+    let elStringToBitsSection = document.getElementById('stringtobits')
+    let elBytesToBitsSection = document.getElementById('bytestobits')
+    let elFileToBitsSection = document.getElementById('filetobits')
+    let elBreakdown1String = document.querySelectorAll('#stringtobits .breakdown')[0]
+    let elBreakdown2String = document.querySelectorAll('#stringtobits .breakdown')[1]
+    let elBreakdown1Bytes = document.querySelectorAll('#bytestobits .breakdown')[0]
+    let elBreakdown1File = document.querySelectorAll('#filetobits .breakdown')[0]
+    let elBreakdown2File = document.querySelectorAll('#filetobits .breakdown')[1]
+    
+    let elBlocksAfterPadding = document.getElementById('blocksafterpadding')
+
+    let elAbsorbNext = document.getElementById('absorbnext')
+    let elAbsorbPrev = document.getElementById('absorbprev')
+    elAbsorbNext.onclick = () => {
+      if (state.absorbFnView == 120) {
+        state.absorbBlockView++
+        state.absorbFnView = 0
+      }
+      else {
+        state.absorbFnView++
+      }
+      updatePage()
+    }
+
+    elAbsorbPrev.onclick = () => {
+      if (state.absorbFnView == 0) {
+        state.absorbBlockView--
+        state.absorbFnView = 120
+      }
+      else {
+        state.absorbFnView--
+      }
+      updatePage()
+    }
+
+    let elSqueezeNext = document.getElementById('squeezenext')
+    let elSqueezePrev = document.getElementById('squeezeprev')
+    elSqueezeNext.onclick = () => {
+      if (state.squeezeFnView == 120) {
+        state.squeezeBlockView++
+        state.squeezeFnView = 0
+      }
+      else {
+        state.squeezeFnView++
+      }
+      updatePage()
+    }
+
+    elSqueezePrev.onclick = () => {
+      if (state.squeezeFnView == 0) {
+        state.squeezeBlockView--
+        state.squeezeFnView = 120
+      }
+      else {
+        state.squeezeFnView--
+      }
+      updatePage()
+    }
+
+    let roundConst = []
+    roundConst[ 0] = [0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,1].reverse()
+    roundConst[ 1] = [0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 1,0,0,0,0,0,0,0, 1,0,0,0,0,0,1,0].reverse()
+    roundConst[ 2] = [1,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 1,0,0,0,0,0,0,0, 1,0,0,0,1,0,1,0].reverse()
+    roundConst[ 3] = [1,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 1,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 1,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0].reverse()
+    roundConst[ 4] = [0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 1,0,0,0,0,0,0,0, 1,0,0,0,1,0,1,1].reverse()
+    roundConst[ 5] = [0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 1,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,1].reverse()
+    roundConst[ 6] = [1,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 1,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 1,0,0,0,0,0,0,0, 1,0,0,0,0,0,0,1].reverse()
+    roundConst[ 7] = [1,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 1,0,0,0,0,0,0,0, 0,0,0,0,1,0,0,1].reverse()
+    roundConst[ 8] = [0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 1,0,0,0,1,0,1,0].reverse()
+    roundConst[ 9] = [0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 1,0,0,0,1,0,0,0].reverse()
+    roundConst[10] = [0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 1,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 1,0,0,0,0,0,0,0, 0,0,0,0,1,0,0,1].reverse()
+    roundConst[11] = [0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 1,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,1,0,1,0].reverse()
+    roundConst[12] = [0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 1,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 1,0,0,0,0,0,0,0, 1,0,0,0,1,0,1,1].reverse()
+    roundConst[13] = [1,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 1,0,0,0,1,0,1,1].reverse()
+    roundConst[14] = [1,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 1,0,0,0,0,0,0,0, 1,0,0,0,1,0,0,1].reverse()
+    roundConst[15] = [1,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 1,0,0,0,0,0,0,0, 0,0,0,0,0,0,1,1].reverse()
+    roundConst[16] = [1,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 1,0,0,0,0,0,0,0, 0,0,0,0,0,0,1,0].reverse()
+    roundConst[17] = [1,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 1,0,0,0,0,0,0,0].reverse()
+    roundConst[18] = [0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 1,0,0,0,0,0,0,0, 0,0,0,0,1,0,1,0].reverse()
+    roundConst[19] = [1,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 1,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,1,0,1,0].reverse()
+    roundConst[20] = [1,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 1,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 1,0,0,0,0,0,0,0, 1,0,0,0,0,0,0,1].reverse()
+    roundConst[21] = [1,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 1,0,0,0,0,0,0,0, 1,0,0,0,0,0,0,0].reverse()
+    roundConst[22] = [0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 1,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,1].reverse()
+    roundConst[23] = [1,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 1,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 1,0,0,0,0,0,0,0, 0,0,0,0,1,0,0,0].reverse()
+    
+
+
+    function resetView() {
+
+      elFlavorSelector.value = 'sha3-256'
+      elShakeLength.value = 256
+      elImSelector.value = 'string'
+      elStringInput.value = 'Hello world!'
+
+
+    }
+
+
+    function updatePage() {
+      ////
+
+
+      if (state.flavor=='shake128' || state.flavor=='shake256') {
+        elShakePart.style.display = ''
+      }
+      else {
+        elShakePart.style.display = 'none'
+      }
+
+
+      if (state.xofError) {
+        elShakeLength.classList.add('error')
+        elShakeLength.classList.remove('noError')
+
+        elStringInput.style.display = 'none'
+        elBitsnBytesInput.style.display = 'none'
+        elFileInput.style.display = 'none'
+        elInputErrorMsg.style.display = ''
+        
+        elInputErrorMsg.innerHTML = state.xofError
+      }
+      else {
+        elShakeLength.classList.add('noError')
+        elShakeLength.classList.remove('error')
+
+        elStringInput.style.display = state.inputMethod=='string' ? '' : 'none'
+        elBitsnBytesInput.style.display = state.inputMethod=='bytes' ? '' : 'none'
+        elFileInput.style.display = state.inputMethod=='file' ? '' : 'none'
+        elInputErrorMsg.style.display = state.inputError ? '' : 'none'
+
+        elInputErrorMsg.innerHTML = state.inputError
+
+      }
+
+      if (state.inputMethod == 'file') {
+        if (state.inputError) {
+          elFileInput.value = ''
+        }
+        else {
+          elFileInput.value = state.inputString
+        }
+      }
+
+
+      let noErrors = () => !state.inputError && !state.xofError
+      let isShake = () => state.flavor=='shake128' || state.flavor=='shake256'
+
+      let calc = { bits: [] } // main obj used for calculations
+      // bits: [1,0]
+
+      if (noErrors()) {
+        elSolution.style.display = ''
+      }
+      else {
+        elSolution.style.display = 'none'
+        return
+      }
+
+      if (state.inputMethod=='string') {
+        elStringToBitsSection.style.display = ''
+        elBytesToBitsSection.style.display = 'none'
+        elFileToBitsSection.style.display = 'none'
+
+        let str1 = '<tbody><tr>', str2 = '<tbody><tr>'
+
+        let textEncoder = new TextEncoder()
+        
+        let letters = state.inputString.split('')
+        let bytes = letters.map(l => Array.from(textEncoder.encode(l)))
+
+        for (let i = 0; i<letters.length; i++) {
+          let temp0 = bytes[i].map(b => b.toString(2).padStart(8,'0')).join('&nbsp;&nbsp;')
+          let temp1 = bytes[i].map(b => b.toString(2).padStart(8,'0').split('').reverse().join('')).join('')
+          str1 += `<td> ${temp0} </td>`
+          str2 += `<td> ${temp1} </td>`
+          calc.bits.push( ...temp1.split('').map(Number) )
+        }
+        str1 += `</tr><tr>`
+        str2 += `</tr><tr>`
+        for (let i = 0; i<letters.length; i++) {
+          str1 += `<td> ${letters[i]} </td>`
+          str2 += `<td> ${letters[i]} </td>`
+        }
+        str1 += `</tr></tbody>`
+        str2 += `</tr></tbody>`
+
+
+        elBreakdown1String.innerHTML = str1
+        elBreakdown2String.innerHTML = str2
+
+
+      }
+      else if (state.inputMethod=='bytes') {
+        elStringToBitsSection.style.display = 'none'
+        elBytesToBitsSection.style.display = ''
+        elFileToBitsSection.style.display = 'none'
+
+        let symbols = state.inputString.split('').filter( l => /[0-9a-fA-F+\-]/g.test(l) )
+        let bits = symbols.map(s => {
+          if (s=='+') return '1'
+          if (s=='-') return '0'
+          return Number(`0x${s}`).toString(2).padStart(4,'0')
+        })
+
+        let str = '<tbody><tr>'
+        for (let i = 0; i<symbols.length; i++) {
+          str += `<td> ${bits[i]} </td>`
+
+          calc.bits.push( ...bits[i].split('').map(Number) )
+        }
+        str += `</tr><tr>`
+        for (let i = 0; i<symbols.length; i++) {
+          str += `<td> ${symbols[i]} </td>`
+        }
+        str += `</tr></tbody>`
+
+        elBreakdown1Bytes.innerHTML = str
+
+      }
+      else { // file
+        elStringToBitsSection.style.display = 'none'
+        elBytesToBitsSection.style.display = 'none'
+        elFileToBitsSection.style.display = ''
+
+        let str1 = '<tbody><tr>', str2 = '<tbody><tr>'
+
+        let bytes = state.inputString.split(':')[1].split(' ').filter(a => a)
+        let bits1 = bytes.map(b => Number(`0x${b}`)).map(n => n.toString(2).padStart(8,'0'))
+        let bits2 = bits1.map(b => b.split('').reverse().join(''))
+
+
+        for (let i = 0; i<bytes.length; i++) {
+          str1 += `<td> ${bits1[i]} </td>`
+          str2 += `<td> ${bits2[i]} </td>`
+
+          calc.bits.push( ...bits2[i].split('').map(Number) )
+        }
+        str1 += `</tr><tr>`
+        str2 += `</tr><tr>`
+        for (let i = 0; i<bytes.length; i++) {
+          str1 += `<td> ${bytes[i]} </td>`
+          str2 += `<td> ${bytes[i]} </td>`
+        }
+        str1 += `</tr></tbody>`
+        str2 += `</tr></tbody>`
+
+        elBreakdown1File.innerHTML = str1
+        elBreakdown2File.innerHTML = str2
+      }
+
+
+      let temp0 = calc.bits.length
+      let temp1 = isShake() ? 4 : 2
+      calc.blockLength = lib.blockLengthFromStandard(state.flavor)
+      let temp3 = lib.howManyZerosToPadWith(temp0, calc.blockLength, isShake())
+
+      let elFillinPaddingSection = document.querySelectorAll('#paddingsection .fillin')
+      elFillinPaddingSection[0].innerText = temp0
+      elFillinPaddingSection[1].innerText = temp1
+      elFillinPaddingSection[2].innerText = temp0 + temp1 + 2
+      elFillinPaddingSection[3].innerText = temp0 + temp1 + 2
+      elFillinPaddingSection[4].innerText = calc.blockLength
+      elFillinPaddingSection[5].innerText = temp3
+      elFillinPaddingSection[6].innerText = calc.blockLength
+
+      calc.paddedBits = lib.addPadding(calc.bits, temp3, isShake())
+
+      let padBitCount = calc.paddedBits.length - calc.bits.length
+      let blockCount = calc.paddedBits.length/calc.blockLength
+
+      calc.blocks = []
+      for (let i = 0; i<blockCount; i++) {
+        calc.blocks.push( lib.sliceArr(calc.paddedBits, calc.blockLength*i, calc.blockLength)  )
+      }
+
+      calc.absorbSteps = [] // [{before, after}] for each block
+      for (let i = 0; i<calc.blocks.length+1; i++) {
+        calc.absorbSteps[i] = [{before: null, after: null}]
+      }
+
+      calc.absorbSteps[0][0].before = lib.createArr(1600)
+
+      for (let bl = 0; bl<calc.blocks.length; bl++) {
+
+        let block = lib.appendArr(calc.blocks[bl], lib.createArr(1600-calc.blockLength) )
+        calc.absorbSteps[bl][0].after = lib.xorBitArr(block, calc.absorbSteps[bl][0].before)
+
+        for (let i = 0; i<24; i++) {
+          calc.absorbSteps[bl].push({
+            before: calc.absorbSteps[bl][calc.absorbSteps[bl].length-1].after,
+            after: lib.theta(calc.absorbSteps[bl][calc.absorbSteps[bl].length-1].after),
+          })
+          calc.absorbSteps[bl].push({
+            before: calc.absorbSteps[bl][calc.absorbSteps[bl].length-1].after,
+            after: lib.rho(calc.absorbSteps[bl][calc.absorbSteps[bl].length-1].after),
+          })
+          calc.absorbSteps[bl].push({
+            before: calc.absorbSteps[bl][calc.absorbSteps[bl].length-1].after,
+            after: lib.pi(calc.absorbSteps[bl][calc.absorbSteps[bl].length-1].after),
+          })
+          calc.absorbSteps[bl].push({
+            before: calc.absorbSteps[bl][calc.absorbSteps[bl].length-1].after,
+            after: lib.chi(calc.absorbSteps[bl][calc.absorbSteps[bl].length-1].after),
+          })
+          calc.absorbSteps[bl].push({
+            before: calc.absorbSteps[bl][calc.absorbSteps[bl].length-1].after,
+            after: lib.iota(calc.absorbSteps[bl][calc.absorbSteps[bl].length-1].after, i),
+          })
+        }
+
+        calc.absorbSteps[bl+1][0].before = calc.absorbSteps[bl][calc.absorbSteps[bl].length-1].after
+
+      }
+
+      calc.absorbSteps.pop()
+
+      window.calc = calc
+
+      calc.outputBlockCount = Math.ceil( lib.outputLengthFromStandard(state.flavor, state.xofLength) / lib.blockLengthFromStandard(state.flavor) )
+
+      calc.squeezeSteps = [] // [{before, after}] for each block
+      for (let i = 0; i<calc.outputBlockCount+1; i++) { 
+        calc.squeezeSteps[i] = [{before: null, after: null}]
+      }
+
+      calc.squeezeSteps[0][0].before = calc.absorbSteps[calc.absorbSteps.length-1][120].after
+
+      for (let bl = 0; bl<calc.outputBlockCount; bl++) {
+        calc.squeezeSteps[bl][0].after = calc.squeezeSteps[bl][0].before
+
+        for (let i = 0; i<24; i++) {
+          calc.squeezeSteps[bl].push({
+            before: calc.squeezeSteps[bl][calc.squeezeSteps[bl].length-1].after,
+            after: lib.theta(calc.squeezeSteps[bl][calc.squeezeSteps[bl].length-1].after),
+          })
+          calc.squeezeSteps[bl].push({
+            before: calc.squeezeSteps[bl][calc.squeezeSteps[bl].length-1].after,
+            after: lib.rho(calc.squeezeSteps[bl][calc.squeezeSteps[bl].length-1].after),
+          })
+          calc.squeezeSteps[bl].push({
+            before: calc.squeezeSteps[bl][calc.squeezeSteps[bl].length-1].after,
+            after: lib.pi(calc.squeezeSteps[bl][calc.squeezeSteps[bl].length-1].after),
+          })
+          calc.squeezeSteps[bl].push({
+            before: calc.squeezeSteps[bl][calc.squeezeSteps[bl].length-1].after,
+            after: lib.chi(calc.squeezeSteps[bl][calc.squeezeSteps[bl].length-1].after),
+          })
+          calc.squeezeSteps[bl].push({
+            before: calc.squeezeSteps[bl][calc.squeezeSteps[bl].length-1].after,
+            after: lib.iota(calc.squeezeSteps[bl][calc.squeezeSteps[bl].length-1].after, i),
+          })
+        }
+
+        calc.squeezeSteps[bl+1][0].before = calc.squeezeSteps[bl][calc.squeezeSteps[bl].length-1].after
+
+      }
+
+      calc.squeezeSteps.pop()
+
+
+
+      if (true) {
+        elBlocksAfterPadding.innerHTML = createTableFromInputBlocks(calc.blocks)
+
+        for (let i = 0; i<calc.paddedBits.length; i++) {
+          if (i < calc.bits.length) {
+            getNinTable(elBlocksAfterPadding, i).classList = ['whitecolor']
+          }
+          else {
+            getNinTable(elBlocksAfterPadding, i).classList = ['greencolor']
+          }
+        }
+      }
+
+
+      if (true) {
+        let elEmptyState = document.getElementById('emptystate')
+        let elEmptyStateExpl = document.querySelectorAll('#introtostate .fillin')
+
+        elEmptyState.innerHTML = createTableFromState( lib.createArr(1600) )
+
+        let leavehandler = () => {
+          for (let i = 0; i<1600; i++) {
+            getNinTable(elEmptyState, i).classList = ''
+          }
+          elEmptyStateExpl[0].innerText = ''
+          elEmptyStateExpl[1].innerText = ''
+          elEmptyStateExpl[2].innerText = ''
+        }
+
+        let hoverhandler = i => {
+          let x = i % 64
+          let y = Math.floor(i / 64)
+
+          for (let i = 0; i<1600; i++) {
+            getNinTable(elEmptyState, i).classList = 'gray'
+          }
+          for (let i = 0; i<64; i++) {
+            getXYInTable(elEmptyState, i, y).classList = 'dimgold'
+          }
+          for (let i = 0; i<25; i++) {
+            getXYInTable(elEmptyState, x, i).classList = 'dimred'
+          }
+          
+
+          getXYInTable(elEmptyState, x, y).classList = 'brightgreen'
+         
+
+          elEmptyStateExpl[0].innerText = `Bit ${i+1},`
+          elEmptyStateExpl[1].innerText = `Lane ${y+1},`
+          elEmptyStateExpl[2].innerText = `Slice ${x+1}`
+          
+        }
+
+        for (let i = 0; i<1600; i++) {
+          getNinTable(elEmptyState, i).onmouseenter = () => hoverhandler(i)
+          getNinTable(elEmptyState, i).onmouseleave = leavehandler
+        }
+      }
+
+      if (true) {
+        let elAbsorbingPhaseSection = document.getElementById('absorbingphase')
+        let fillins = elAbsorbingPhaseSection.querySelectorAll('.fillin')
+        fillins[0].innerText = calc.blocks.length
+      }
+
+      if (true) {
+        let str = ''
+        for (let i = 0; i<calc.blocks.length; i++) {
+          str += `<option value="${i}">${i+1}</option>`
+        }
+        elAbsorbBlockSelector.innerHTML = str
+        elAbsorbBlockSelector.value = `${state.absorbBlockView}`
+        elAbsorbFnSelector.value = `${state.absorbFnView}`
+      }
+
+      if (true) {
+        let elAbsorbSteps = [
+          document.getElementById('absorbXorStep'),
+          document.getElementById('absorbIotaStep'),
+          document.getElementById('absorbThetaStep'),
+          document.getElementById('absorbRhoStep'),
+          document.getElementById('absorbPiStep'),
+          document.getElementById('absorbChiStep'),
+        ]
+
+
+        let visibleStep
+        if (state.absorbFnView==0) visibleStep = 0
+        else {
+          visibleStep = (state.absorbFnView % 5) + 1
+        }
+
+
+        for (let i = 0; i<elAbsorbSteps.length; i++) {
+          if (visibleStep === i) {
+            elAbsorbSteps[i].style.display = ''
+          }
+          else {
+            elAbsorbSteps[i].style.display = 'none'
+          }
+        }
+
+        let elAbsorbStep = elAbsorbSteps[visibleStep]
+
+        let stateBefore = elAbsorbStep.querySelectorAll('.state')[0]
+        let stateAfter = elAbsorbStep.querySelectorAll('.state')[1]
+
+        stateBefore.innerHTML = createTableFromState( calc.absorbSteps[state.absorbBlockView][state.absorbFnView].before )
+        stateAfter.innerHTML = createTableFromState( calc.absorbSteps[state.absorbBlockView][state.absorbFnView].after )
+
+        let enterHandlers = [
+          absorbXorEnterHandler,
+          absorbIotaEnterHandler,
+          absorbThetaEnterHandler,
+          absorbRhoEnterHandler,
+          absorbPiEnterHandler,
+          absorbChiEnterHandler,
+        ]
+
+        let leaveHandlers = [
+          absorbXorLeaveHandler,
+          absorbIotaLeaveHandler,
+          absorbThetaLeaveHandler,
+          absorbRhoLeaveHandler,
+          absorbPiLeaveHandler,
+          absorbChiLeaveHandler,
+        ]
+
+        for (let i = 0; i<1600; i++) {
+          getNinTable(stateAfter, i).onmouseenter = () => enterHandlers[visibleStep](i)
+          getNinTable(stateAfter, i).onmouseleave = leaveHandlers[visibleStep]
+        }
+      }
+
+      if (true) {
+        let elAbsorbXorInputBlock = document.getElementById('absorbXorInputBlock')
+        let str = ''
+        let block = calc.blocks[state.absorbBlockView]
+        for (let i = 0; i<block.length; i++) {
+          str += `<span>${block[i]}</span>`
+          // if (i%128==127) str += '<br>'
+        }
+        elAbsorbXorInputBlock.innerHTML = str
+      }
+
+      if (state.absorbFnView >= 5) {
+        
+        let elAbsorbIotaRoundConst = document.getElementById('absorbIotaRoundConst')
+
+        let str = ''
+        // let rc = roundConst[Math.floor(state.absorbFnView/5)-1]
+        for (let i = 0; i<24; i++) {
+          str += `<li>`
+          for (let j = 0; j<64; j++) {
+            str += `<span>${roundConst[i][j]}</span>`
+          }
+          str += `</li>`
+        }
+        elAbsorbIotaRoundConst.innerHTML = str
+        
+        let lis = elAbsorbIotaRoundConst.getElementsByTagName('li')
+        let round = Math.floor(state.absorbFnView/5)-1
+        for (let i = 0; i<lis.length; i++) {
+          if (i==round) continue
+          lis[i].classList.add('perished')
+        }
+
+      }
+
+      if (true) {
+        elAbsorbNext.disabled = false
+        elAbsorbPrev.disabled = false
+        if (state.absorbFnView==0 && state.absorbBlockView==0) {
+          elAbsorbPrev.disabled = true
+        }
+        if (state.absorbFnView==120 && state.absorbBlockView==calc.blocks.length-1) {
+          elAbsorbNext.disabled = true
+        }
+      }
+
+      if ( isShake() ) {
+        document.getElementById('nonshakesqueezingphase').style.display = 'none'
+        document.getElementById('squeezingphase').style.display = ''
+      }
+      else {
+        document.getElementById('nonshakesqueezingphase').style.display = ''
+        document.getElementById('squeezingphase').style.display = 'none'
+      }
+
+      if ( !isShake() ) {
+        let elNonShakeSqueezingState = document.querySelector('#nonshakesqueezingphase .state')
+        let finalState = calc.absorbSteps[calc.blocks.length-1][120].after
+        elNonShakeSqueezingState.innerHTML = createTableFromState( finalState )
+
+        let outputLen = lib.outputLengthFromStandard( state.flavor )
+        let outputBits = lib.sliceArr(finalState, 0, outputLen)
+        let outputBytes = lib.bitArrToByteArr(outputBits)
+
+        for (let i = 0; i<1600; i++) {
+          if (i < outputLen) {
+            if (i%16<8) {
+              getNinTable( elNonShakeSqueezingState, i ).classList = 'greencolor'
+            }
+            else {
+              getNinTable( elNonShakeSqueezingState, i ).classList = 'pinkcolor'
+            }
+          }
+          else {
+            getNinTable( elNonShakeSqueezingState, i ).classList = 'bg'
+          }
+        }
+
+        let elEightBitGroups = document.querySelector('#nonshakesqueezingphase .eightbitgroups')
+        elEightBitGroups.innerHTML = outputBytes.map((b,ind) => `<span class="${ind%2 ? 'pinkcolor': 'greencolor'}">${b.toString(2).padStart(8,'0')}</span>`).join(' ')
+
+        let elResult = document.querySelector('#nonshakesqueezingphase .result')
+        elResult.innerHTML = outputBytes.map((b,ind) => `<span class="${ind%2 ? 'pinkcolor': 'greencolor'}">${b.toString(16).padStart(2,'0')}</span>`).join(' ')
+
+      }
+
+      if ( isShake() ) {
+
+        let fillins = document.querySelectorAll('#squeezingphase .fillin')
+        fillins[0].innerText = state.xofLength
+      }
+      
+      if ( isShake() ) {
+        let str = ''
+        for (let i = 0; i<calc.outputBlockCount; i++) {
+          str += `<option value="${i}">${i+1}</option>`
+        }
+        elSqueezeBlockSelector.innerHTML = str
+        elSqueezeBlockSelector.value = `${state.squeezeBlockView}`
+
+        if (state.squeezeBlockView == calc.outputBlockCount-1 ) {
+          for (let i = 1; i<121; i++) {
+            elSqueezeFnSelector.children[i].style.display = 'none'
+          }
+        }
+        else {
+          for (let i = 1; i<121; i++) {
+            elSqueezeFnSelector.children[i].style.display = ''
+          }
+        }
+
+        elSqueezeFnSelector.value = `${state.squeezeFnView}`
+      }
+
+      if ( isShake() ) {
+        elSqueezeNext.disabled = false
+        elSqueezePrev.disabled = false
+        if (state.squeezeFnView==0 && state.squeezeBlockView==0) {
+          elSqueezePrev.disabled = true
+        }
+        if (state.squeezeFnView==0 && state.squeezeBlockView==calc.outputBlockCount-1) {
+          elSqueezeNext.disabled = true
+        }
+      }
+
+
+      if ( isShake() ) {
+        let elSqueezeSteps = [
+          document.getElementById('squeezeTakeStep'),
+          document.getElementById('squeezeIotaStep'),
+          document.getElementById('squeezeThetaStep'),
+          document.getElementById('squeezeRhoStep'),
+          document.getElementById('squeezePiStep'),
+          document.getElementById('squeezeChiStep'),
+        ]
+
+
+        let visibleStep
+        if (state.squeezeFnView==0) visibleStep = 0
+        else {
+          visibleStep = (state.squeezeFnView % 5) + 1
+        }
+
+
+        for (let i = 0; i<elSqueezeSteps.length; i++) {
+          if (visibleStep === i) {
+            elSqueezeSteps[i].style.display = ''
+          }
+          else {
+            elSqueezeSteps[i].style.display = 'none'
+          }
+        }
+
+        let elSqueezeStep = elSqueezeSteps[visibleStep]
+
+        let stateBefore = elSqueezeStep.querySelectorAll('.state')[0]
+        let stateAfter = elSqueezeStep.querySelectorAll('.state')[1]
+
+        stateBefore.innerHTML = createTableFromState( calc.squeezeSteps[state.squeezeBlockView][state.squeezeFnView].before )
+        stateAfter.innerHTML = createTableFromState( calc.squeezeSteps[state.squeezeBlockView][state.squeezeFnView].after )
+
+        let enterHandlers = [
+          squeezeTakeEnterHandler,
+          squeezeIotaEnterHandler,
+          squeezeThetaEnterHandler,
+          squeezeRhoEnterHandler,
+          squeezePiEnterHandler,
+          squeezeChiEnterHandler,
+        ]
+
+        let leaveHandlers = [
+          squeezeTakeLeaveHandler,
+          squeezeIotaLeaveHandler,
+          squeezeThetaLeaveHandler,
+          squeezeRhoLeaveHandler,
+          squeezePiLeaveHandler,
+          squeezeChiLeaveHandler,
+        ]
+
+        for (let i = 0; i<1600; i++) {
+          getNinTable(stateAfter, i).onmouseenter = () => enterHandlers[visibleStep](i)
+          getNinTable(stateAfter, i).onmouseleave = leaveHandlers[visibleStep]
+        }
+      }
+
+      if ( isShake() && state.squeezeFnView >= 5) {
+        
+        let elSqueezeIotaRoundConst = document.getElementById('squeezeIotaRoundConst')
+      
+        let str = ''
+        // let rc = roundConst[Math.floor(state.squeezeFnView/5)-1]
+        for (let i = 0; i<24; i++) {
+          str += `<li>`
+          for (let j = 0; j<64; j++) {
+            str += `<span>${roundConst[i][j]}</span>`
+          }
+          str += `</li>`
+        }
+        elSqueezeIotaRoundConst.innerHTML = str
+        
+        let lis = elSqueezeIotaRoundConst.getElementsByTagName('li')
+        let round = Math.floor(state.squeezeFnView/5)-1
+        for (let i = 0; i<lis.length; i++) {
+          if (i==round) continue
+          lis[i].classList.add('perished')
+        }
+      
+      }
+
+      if ( isShake() && state.squeezeFnView==0 ) {
+        let r = lib.blockLengthFromStandard(state.flavor)
+        let d = state.xofLength
+        let fillins = document.querySelectorAll('#squeezeTakeStep .fillin')
+        fillins[0].innerText = state.flavor
+        fillins[1].innerText = r
+        fillins[2].innerText = r * state.squeezeBlockView
+        fillins[3].innerText = r * (state.squeezeBlockView+1)
+        fillins[4].innerText = d
+        fillins[5].innerText = d
+        fillins[6].innerText = r * (state.squeezeBlockView+1)
+        fillins[7].innerText = d
+        fillins[8].innerText = r * (state.squeezeBlockView+1) - d
+
+        if (state.squeezeBlockView == calc.outputBlockCount-1) {
+          document.querySelector('#squeezeTakeStep .finalstep').style.display = ''
+          document.querySelector('#squeezeTakeStep .nonfinalstep').style.display = 'none'
+
+          for (let i = 0; i<d%r; i++) {
+            if (i%16<8) {
+              getNinTable(elSqueezeTakeBeforeState, i).classList = 'greencolor'
+            }
+            else {
+              getNinTable(elSqueezeTakeBeforeState, i).classList = 'pinkcolor'
+            }
+          }
+          for (let i = d%r; i<1600; i++) {
+            getNinTable(elSqueezeTakeBeforeState, i).classList = 'bg'
+          }
+        }
+        else {
+          document.querySelector('#squeezeTakeStep .finalstep').style.display = 'none'
+          document.querySelector('#squeezeTakeStep .nonfinalstep').style.display = ''
+
+          for (let i = 0; i<r; i++) {
+            if (i%16<8) {
+              getNinTable(elSqueezeTakeBeforeState, i).classList = 'greencolor'
+            }
+            else {
+              getNinTable(elSqueezeTakeBeforeState, i).classList = 'pinkcolor'
+            }
+          }
+          for (let i = r; i<1600; i++) {
+            getNinTable(elSqueezeTakeBeforeState, i).classList = 'bg'
+          }
+        }
+
+      }
+
+      if ( isShake() ) {
+        let elEightBitGroups = document.querySelector('#squeezingphase .eightbitgroups')
+        let elEightBitGroupsReverse = document.querySelector('#squeezingphase .eightbitgroupsreverse')
+
+        let r = lib.blockLengthFromStandard(state.flavor)
+        let d = state.xofLength
+
+        let outputBits = []
+        for (let i = 0; i<calc.outputBlockCount; i++) {
+          if (i == calc.outputBlockCount-1 ) {
+            outputBits = lib.appendArr(outputBits, lib.sliceArr(calc.squeezeSteps[i][0].before, 0, d%r) )
+          }
+          else {
+            outputBits = lib.appendArr(outputBits, lib.sliceArr(calc.squeezeSteps[i][0].before, 0, r) )
+          }
+        }
+        
+        let outputBytes = lib.bitArrToByteArr(outputBits)
+
+        elEightBitGroups.innerHTML = outputBytes.map((b,ind) => `<span class="${ind%2 ? 'pinkcolor': 'greencolor'}">${b.toString(2).padStart(8,'0').split('').reverse().join('')}</span>`).join(' ')
+
+        elEightBitGroupsReverse.innerHTML = outputBytes.map((b,ind) => `<span class="${ind%2 ? 'pinkcolor': 'greencolor'}">${b.toString(2).padStart(8,'0')}</span>`).join(' ')
+
+        let elResult = document.querySelector('#squeezingphase .result')
+        elResult.innerHTML = outputBytes.map((b,ind) => `<span class="${ind%2 ? 'pinkcolor': 'greencolor'}">${b.toString(16).padStart(2,'0')}</span>`).join(' ')
+      }
+
+
+    }
+
+    
+    
+
+
+    let elAbsorbXorInputBlock = document.getElementById('absorbXorInputBlock')
+
+    let elAbsorbIotaRoundConst = document.getElementById('absorbIotaRoundConst')
+    elAbsorbIotaRoundConst.onmouseenter = () => {
+      let lis = elAbsorbIotaRoundConst.getElementsByTagName('li')
+      for (let i = 0; i<lis.length; i++) {
+        lis[i].classList.remove('perished')
+      }
+    }
+    elAbsorbIotaRoundConst.onmouseleave = () => {
+      let lis = elAbsorbIotaRoundConst.getElementsByTagName('li')
+      let round = Math.floor(state.absorbFnView/5)-1
+      for (let i = 0; i<lis.length; i++) {
+        if (i==round) continue
+        lis[i].classList.add('perished')
+      }
+    }
+
+
+
+
+
+    let elAbsorbXorBeforeState = document.querySelectorAll('#absorbXorStep .state')[0]
+    let elAbsorbXorAfterState = document.querySelectorAll('#absorbXorStep .state')[1]
+    let elAbsorbThetaBeforeState = document.querySelectorAll('#absorbThetaStep .state')[0]
+    let elAbsorbThetaAfterState = document.querySelectorAll('#absorbThetaStep .state')[1]
+    let elAbsorbRhoBeforeState = document.querySelectorAll('#absorbRhoStep .state')[0]
+    let elAbsorbRhoAfterState = document.querySelectorAll('#absorbRhoStep .state')[1]
+    let elAbsorbPiBeforeState = document.querySelectorAll('#absorbPiStep .state')[0]
+    let elAbsorbPiAfterState = document.querySelectorAll('#absorbPiStep .state')[1]
+    let elAbsorbChiBeforeState = document.querySelectorAll('#absorbChiStep .state')[0]
+    let elAbsorbChiAfterState = document.querySelectorAll('#absorbChiStep .state')[1]
+    let elAbsorbIotaBeforeState = document.querySelectorAll('#absorbIotaStep .state')[0]
+    let elAbsorbIotaAfterState = document.querySelectorAll('#absorbIotaStep .state')[1]
+
+    function absorbXorEnterHandler (i) {
+      for (let i = 0; i<calc.blocks[0].length; i++) {
+        getNinTable(elAbsorbXorInputBlock, i).classList = 'bg'
+      }
+
+      for (let i = 0; i<1600; i++) {
+        if (i < calc.blocks[0].length) {
+          getNinTable(elAbsorbXorBeforeState, i).classList = 'gray'
+          getNinTable(elAbsorbXorAfterState, i).classList = 'gray'
+        }
+        else {
+          getNinTable(elAbsorbXorBeforeState, i).classList = 'bg'
+          getNinTable(elAbsorbXorAfterState, i).classList = 'bg'  
+        }
+      }
+
+      let p0 = getNinTable(elAbsorbXorAfterState, i)
+      let p1 = getNinTable(elAbsorbXorBeforeState, i)
+      p0.classList = 'white'
+      p1.classList = 'brightgreen'
+      
+      if (i < calc.blocks[0].length) {
+        let p2 = getNinTable(elAbsorbXorInputBlock, i)
+        p2.classList = 'brightgold'
+
+        document.querySelector('#absorbXorStep .fillin').innerHTML = `
+          <span class="white">${p0.innerText}</span> = xor( <span class="brightgreen">${p1.innerText}</span>, <span class="brightgold">${p2.innerText}</span>)
+        `
+      }
+      else {
+        document.querySelector('#absorbXorStep .fillin').innerHTML = `
+          <span class="white">${p0.innerText}</span> = <span class="brightgreen">${p1.innerText}</span>
+        `
+      }
+
+
+
+    }
+
+    function absorbIotaEnterHandler (i) {
+      for (let i = 0; i<1600; i++) {
+        getNinTable(elAbsorbIotaBeforeState, i).classList = 'bg'
+        getNinTable(elAbsorbIotaAfterState, i).classList = 'bg'
+      }
+
+      for (let i = 0; i<24*64; i++) {
+        getNinTable(elAbsorbIotaRoundConst, i).classList = 'bg'
+      }
+
+      let x = i % 64
+      let y = Math.floor(i / 64)
+      let round = Math.floor(state.absorbFnView/5)-1
+
+
+      for (let i = 0; i<64; i++) {
+        getNinTable(elAbsorbIotaBeforeState, i).classList = 'gray'
+        getNinTable(elAbsorbIotaAfterState, i).classList = 'gray'
+        getNinTable(elAbsorbIotaRoundConst, round*64+i).classList = 'gray'
+      }
+
+      let p0 = getNinTable(elAbsorbIotaAfterState, i)
+      let p1 = getNinTable(elAbsorbIotaBeforeState, i)
+      p0.classList = 'white'
+      p1.classList = 'brightgreen'
+
+      if (i<64) {
+        let p2 = getNinTable(elAbsorbIotaRoundConst, round*64+i)
+        p2.classList = 'brightgold'
+
+        document.querySelector('#absorbIotaStep .fillin').innerHTML = `
+          <span class="white">${p0.innerText}</span> = xor( <span class="brightgreen">${p1.innerText}</span>, <span class="brightgold">${p2.innerText}</span>)`
+      }
+      else {
+        document.querySelector('#absorbIotaStep .fillin').innerHTML = `
+          <span class="white">${p0.innerText}</span> = <span class="brightgreen">${p1.innerText}</span>`
+      }
+
+    }
+
+    function absorbThetaEnterHandler (i) {
+      for (let i = 0; i<1600; i++) {
+        getNinTable(elAbsorbThetaBeforeState, i).classList = 'bg'
+        getNinTable(elAbsorbThetaAfterState, i).classList = 'bg'
+      }
+      
+      let x = i % 64
+      let y = Math.floor(i / 64)
+
+      let sides = [
+        {x: x, y: 0 + (y+4)%5},
+        {x: x, y: 5 + (y+4)%5},
+        {x: x, y: 10 + (y+4)%5},
+        {x: x, y: 15 + (y+4)%5},
+        {x: x, y: 20 + (y+4)%5},
+        {x: (x+63)%64, y: 0 + (y+1)%5},
+        {x: (x+63)%64, y: 5 + (y+1)%5},
+        {x: (x+63)%64, y: 10 + (y+1)%5},
+        {x: (x+63)%64, y: 15 + (y+1)%5},
+        {x: (x+63)%64, y: 20 + (y+1)%5},
+      ]
+
+      for (let i = 0; i<25; i++) {
+        getXYInTable(elAbsorbThetaBeforeState, x, i).classList = 'gray3'
+        getXYInTable(elAbsorbThetaBeforeState, (x+63)%64, i).classList = 'gray3'
+        getXYInTable(elAbsorbThetaAfterState, x, i).classList = 'gray3'
+        getXYInTable(elAbsorbThetaAfterState, (x+63)%64, i).classList = 'gray3'
+      }
+      for (let i = 0; i<5; i++) {
+        getXYInTable(elAbsorbThetaBeforeState, sides[i].x, sides[i].y).classList = 'brightgold'
+      }
+      for (let i = 5; i<10; i++) {
+        getXYInTable(elAbsorbThetaBeforeState, sides[i].x, sides[i].y).classList = 'brightred'
+      }
+      getXYInTable(elAbsorbThetaAfterState, x, y).classList = 'white'
+      getXYInTable(elAbsorbThetaBeforeState, x, y).classList = 'brightgreen'
+
+      let arr1 = []
+      for (let i = 0; i<1600; i++) {
+        let el = getNinTable(elAbsorbThetaBeforeState, i)
+        if ( el.classList.contains('brightgold') ) {
+          arr1.push(`<span class="brightgold">${el.innerText}</span>`)
+        }
+        else if ( el.classList.contains('brightred') ) {
+          arr1.push(`<span class="brightred">${el.innerText}</span>`)
+        }
+        else if ( el.classList.contains('brightgreen') ) {
+          arr1.push(`<span class="brightgreen">${el.innerText}</span>`)
+        }
+      }
+      let str1 = `<span class="white">${getNinTable(elAbsorbThetaAfterState, i).innerText}</span> = xor( ${arr1.join(', ')} )`
+      document.querySelector('#absorbThetaStep .fillin').innerHTML = str1
+
+
+    }
+
+    function absorbRhoEnterHandler (i) {
+      for (let i = 0; i<1600; i++) {
+        getNinTable(elAbsorbRhoBeforeState, i).classList = 'bg'
+        getNinTable(elAbsorbRhoAfterState, i).classList = 'bg'
+      }
+
+      let x = i % 64
+      let y = Math.floor(i / 64)
+
+      let shiftAmt = [0, 1, 62, 28, 27, 36, 44, 6, 55, 20, 3, 10, 43, 25, 39, 41, 45, 15, 21, 8, 18, 2, 61, 56, 14]
+      
+      for (let i = 0; i<=5; i++) {
+        getXYInTable(elAbsorbRhoAfterState, (x+64+i)%64, y).classList = 'gray'
+        getXYInTable(elAbsorbRhoBeforeState, (x-shiftAmt[y]+64+i)%64, y).classList = 'gray'
+      }
+      getXYInTable(elAbsorbRhoAfterState, (x+64+6)%64, y).classList = 'gray1'
+      getXYInTable(elAbsorbRhoAfterState, (x+64+7)%64, y).classList = 'gray2'
+      getXYInTable(elAbsorbRhoAfterState, (x+64+8)%64, y).classList = 'gray3'
+      getXYInTable(elAbsorbRhoAfterState, (x+64+9)%64, y).classList = 'gray4'
+     
+      getXYInTable(elAbsorbRhoBeforeState, (x-shiftAmt[y]+64+6)%64, y).classList = 'gray1'
+      getXYInTable(elAbsorbRhoBeforeState, (x-shiftAmt[y]+64+7)%64, y).classList = 'gray2'
+      getXYInTable(elAbsorbRhoBeforeState, (x-shiftAmt[y]+64+8)%64, y).classList = 'gray3'
+      getXYInTable(elAbsorbRhoBeforeState, (x-shiftAmt[y]+64+9)%64, y).classList = 'gray4'
+      
+
+      getXYInTable(elAbsorbRhoAfterState, x, y).classList = 'white'
+      getXYInTable(elAbsorbRhoBeforeState, (x-shiftAmt[y]+64)%64, y).classList = 'brightgreen'
+
+      document.querySelector('#absorbRhoStep .fillin').innerHTML = `
+        Rotate Lane[&nbsp;&nbsp;<span class="white">${y+1}</span>&nbsp;&nbsp;]
+        &nbsp;&nbsp;
+        to the right by
+        &nbsp;&nbsp;
+        <span class="white">${shiftAmt[y]}</span>
+      `
+
+
+
+    }
+
+    function absorbPiEnterHandler (i) {
+      for (let i = 0; i<1600; i++) {
+        getNinTable(elAbsorbPiBeforeState, i).classList = 'bg'
+        getNinTable(elAbsorbPiAfterState, i).classList = 'bg'
+      }
+
+      let x = i % 64
+      let y = Math.floor(i / 64)
+
+      let indexes = [0, 6, 12, 18, 24, 3, 9, 10, 16, 22, 1, 7, 13, 19, 20, 4, 5, 11, 17, 23, 2, 8, 14, 15, 21]
+
+      for (let i = 0; i<64; i++) {
+        getXYInTable(elAbsorbPiAfterState, i, y).classList ='gray'
+        getXYInTable(elAbsorbPiBeforeState, i, indexes[y] ).classList = 'gray'
+      }
+      getXYInTable(elAbsorbPiAfterState, x, y).classList = 'white'
+      getXYInTable(elAbsorbPiBeforeState, x, indexes[y] ).classList = 'brightgreen'
+
+      document.querySelector('#absorbPiStep .fillin').innerHTML = `
+        Lane[&nbsp;&nbsp;<span class="white">${indexes[y]+1}</span>&nbsp;&nbsp;]
+        &nbsp;&nbsp;
+        becomes
+        &nbsp;&nbsp;
+        Lane[&nbsp;&nbsp;<span class="white">${y+1}</span>&nbsp;&nbsp;]
+      `
+    }
+
+    function absorbChiEnterHandler (i) {
+      for (let i = 0; i<1600; i++) {
+        getNinTable(elAbsorbChiBeforeState, i).classList = 'bg'
+        getNinTable(elAbsorbChiAfterState, i).classList = 'bg'
+      }
+
+      let x = i % 64
+      let y = Math.floor(i / 64)
+      let ys = Math.floor(y/5)*5
+      let y1 = ys + ((y%5) + 1 ) % 5
+      let y2 = ys + ((y%5) + 2 ) % 5
+      
+
+
+      for (let i = 0; i<64; i++) {
+        for (let j = 0; j<5; j++) {
+          getXYInTable(elAbsorbChiBeforeState, i, ys+j ).classList ='gray'
+          getXYInTable(elAbsorbChiAfterState, i, ys+j ).classList ='gray'
+        }
+      }
+
+      
+      let p0 = getXYInTable(elAbsorbChiAfterState, x, y)
+      let p1 = getXYInTable(elAbsorbChiBeforeState, x, y)
+      let p2 = getXYInTable(elAbsorbChiBeforeState, x, y1)
+      let p3 = getXYInTable(elAbsorbChiBeforeState, x, y2)
+      p0.classList = 'white'
+      p1.classList = 'brightgreen'
+      p2.classList = 'brightgold'
+      p3.classList = 'brightred'
+
+      document.querySelector('#absorbChiStep .fillin').innerHTML = `
+      <span class="white">${p0.innerText}</span> = 
+      <span class="brightgreen">${p1.innerText}</span> xor ( (
+      not <span class="brightgold">${p2.innerText}</span>
+      ) and <span class="brightred">${p3.innerText}</span>
+      )`
+
+
+
+
+    }   
+
+    function absorbXorLeaveHandler () {
+      for (let i = 0; i<1600; i++) {
+        getNinTable(elAbsorbXorBeforeState, i).classList = ''
+        getNinTable(elAbsorbXorAfterState, i).classList = ''
+      }
+      for (let i = 0; i<calc.blocks[0].length; i++) {
+        getNinTable(elAbsorbXorInputBlock, i).classList = ''
+      }
+      document.querySelector('#absorbXorStep .fillin').innerHTML = ''
+    }
+
+    function absorbIotaLeaveHandler () {
+      for (let i = 0; i<1600; i++) {
+        getNinTable(elAbsorbIotaBeforeState, i).classList = ''
+        getNinTable(elAbsorbIotaAfterState, i).classList = ''
+      }
+      for (let i = 0; i<24*64; i++) {
+        getNinTable(elAbsorbIotaRoundConst, i).classList = ''
+      }
+      document.querySelector('#absorbIotaStep .fillin').innerHTML = ''
+    }
+
+    function absorbThetaLeaveHandler () {
+      for (let i = 0; i<1600; i++) {
+        getNinTable(elAbsorbThetaBeforeState, i).classList = ''
+        getNinTable(elAbsorbThetaAfterState, i).classList = ''
+      }
+      document.querySelector('#absorbThetaStep .fillin').innerHTML = ''
+    }
+
+    function absorbRhoLeaveHandler () {
+      for (let i = 0; i<1600; i++) {
+        getNinTable(elAbsorbRhoBeforeState, i).classList = ''
+        getNinTable(elAbsorbRhoAfterState, i).classList = ''
+      }
+      document.querySelector('#absorbRhoStep .fillin').innerHTML = ''
+    }
+
+    function absorbPiLeaveHandler () {
+      for (let i = 0; i<1600; i++) {
+        getNinTable(elAbsorbPiBeforeState, i).classList = ''
+        getNinTable(elAbsorbPiAfterState, i).classList = ''
+      }
+      document.querySelector('#absorbPiStep .fillin').innerHTML = ''
+    }
+
+    function absorbChiLeaveHandler () {
+      for (let i = 0; i<1600; i++) {
+        getNinTable(elAbsorbChiBeforeState, i).classList = ''
+        getNinTable(elAbsorbChiAfterState, i).classList = ''
+      }
+      document.querySelector('#absorbChiStep .fillin').innerHTML = ''
+    }
+
+
+
+
+
+
+
+
+
+    
+    let elSqueezeIotaRoundConst = document.getElementById('squeezeIotaRoundConst')
+    elSqueezeIotaRoundConst.onmouseenter = () => {
+      let lis = elSqueezeIotaRoundConst.getElementsByTagName('li')
+      for (let i = 0; i<lis.length; i++) {
+        lis[i].classList.remove('perished')
+      }
+    }
+    elSqueezeIotaRoundConst.onmouseleave = () => {
+      let lis = elSqueezeIotaRoundConst.getElementsByTagName('li')
+      let round = Math.floor(state.squeezeFnView/5)-1
+      for (let i = 0; i<lis.length; i++) {
+        if (i==round) continue
+        lis[i].classList.add('perished')
+      }
+    }
+
+
+
+    let elSqueezeTakeBeforeState = document.querySelectorAll('#squeezeTakeStep .state')[0]
+let elSqueezeTakeAfterState = document.querySelectorAll('#squeezeTakeStep .state')[1]
+let elSqueezeThetaBeforeState = document.querySelectorAll('#squeezeThetaStep .state')[0]
+let elSqueezeThetaAfterState = document.querySelectorAll('#squeezeThetaStep .state')[1]
+let elSqueezeRhoBeforeState = document.querySelectorAll('#squeezeRhoStep .state')[0]
+let elSqueezeRhoAfterState = document.querySelectorAll('#squeezeRhoStep .state')[1]
+let elSqueezePiBeforeState = document.querySelectorAll('#squeezePiStep .state')[0]
+let elSqueezePiAfterState = document.querySelectorAll('#squeezePiStep .state')[1]
+let elSqueezeChiBeforeState = document.querySelectorAll('#squeezeChiStep .state')[0]
+let elSqueezeChiAfterState = document.querySelectorAll('#squeezeChiStep .state')[1]
+let elSqueezeIotaBeforeState = document.querySelectorAll('#squeezeIotaStep .state')[0]
+let elSqueezeIotaAfterState = document.querySelectorAll('#squeezeIotaStep .state')[1]
+
+
+function squeezeTakeEnterHandler (i) {
+  // nothing here
+}
+
+function squeezeIotaEnterHandler (i) {
+  for (let i = 0; i<1600; i++) {
+    getNinTable(elSqueezeIotaBeforeState, i).classList = 'bg'
+    getNinTable(elSqueezeIotaAfterState, i).classList = 'bg'
+  }
+
+  for (let i = 0; i<24*64; i++) {
+    getNinTable(elSqueezeIotaRoundConst, i).classList = 'bg'
+  }
+
+  let x = i % 64
+  let y = Math.floor(i / 64)
+  let round = Math.floor(state.squeezeFnView/5)-1 // todo
+
+
+  for (let i = 0; i<64; i++) {
+    getNinTable(elSqueezeIotaBeforeState, i).classList = 'gray'
+    getNinTable(elSqueezeIotaAfterState, i).classList = 'gray'
+    getNinTable(elSqueezeIotaRoundConst, round*64+i).classList = 'gray'
+  }
+
+  let p0 = getNinTable(elSqueezeIotaAfterState, i)
+  let p1 = getNinTable(elSqueezeIotaBeforeState, i)
+  p0.classList = 'white'
+  p1.classList = 'brightgreen'
+
+  if (i<64) {
+    let p2 = getNinTable(elSqueezeIotaRoundConst, round*64+i)
+    p2.classList = 'brightgold'
+
+    document.querySelector('#squeezeIotaStep .fillin').innerHTML = `
+      <span class="white">${p0.innerText}</span> = xor( <span class="brightgreen">${p1.innerText}</span>, <span class="brightgold">${p2.innerText}</span>)`
+  }
+  else {
+    document.querySelector('#squeezeIotaStep .fillin').innerHTML = `
+      <span class="white">${p0.innerText}</span> = <span class="brightgreen">${p1.innerText}</span>`
+  }
+
+}
+
+function squeezeThetaEnterHandler (i) {
+  for (let i = 0; i<1600; i++) {
+    getNinTable(elSqueezeThetaBeforeState, i).classList = 'bg'
+    getNinTable(elSqueezeThetaAfterState, i).classList = 'bg'
+  }
+  
+  let x = i % 64
+  let y = Math.floor(i / 64)
+
+  let sides = [
+    {x: x, y: 0 + (y+4)%5},
+    {x: x, y: 5 + (y+4)%5},
+    {x: x, y: 10 + (y+4)%5},
+    {x: x, y: 15 + (y+4)%5},
+    {x: x, y: 20 + (y+4)%5},
+    {x: (x+63)%64, y: 0 + (y+1)%5},
+    {x: (x+63)%64, y: 5 + (y+1)%5},
+    {x: (x+63)%64, y: 10 + (y+1)%5},
+    {x: (x+63)%64, y: 15 + (y+1)%5},
+    {x: (x+63)%64, y: 20 + (y+1)%5},
+  ]
+
+  for (let i = 0; i<25; i++) {
+    getXYInTable(elSqueezeThetaBeforeState, x, i).classList = 'gray3'
+    getXYInTable(elSqueezeThetaBeforeState, (x+63)%64, i).classList = 'gray3'
+    getXYInTable(elSqueezeThetaAfterState, x, i).classList = 'gray3'
+    getXYInTable(elSqueezeThetaAfterState, (x+63)%64, i).classList = 'gray3'
+  }
+  for (let i = 0; i<5; i++) {
+    getXYInTable(elSqueezeThetaBeforeState, sides[i].x, sides[i].y).classList = 'brightgold'
+  }
+  for (let i = 5; i<10; i++) {
+    getXYInTable(elSqueezeThetaBeforeState, sides[i].x, sides[i].y).classList = 'brightred'
+  }
+  getXYInTable(elSqueezeThetaAfterState, x, y).classList = 'white'
+  getXYInTable(elSqueezeThetaBeforeState, x, y).classList = 'brightgreen'
+
+  let arr1 = []
+  for (let i = 0; i<1600; i++) {
+    let el = getNinTable(elSqueezeThetaBeforeState, i)
+    if ( el.classList.contains('brightgold') ) {
+      arr1.push(`<span class="brightgold">${el.innerText}</span>`)
+    }
+    else if ( el.classList.contains('brightred') ) {
+      arr1.push(`<span class="brightred">${el.innerText}</span>`)
+    }
+    else if ( el.classList.contains('brightgreen') ) {
+      arr1.push(`<span class="brightgreen">${el.innerText}</span>`)
+    }
+  }
+  let str1 = `<span class="white">${getNinTable(elSqueezeThetaAfterState, i).innerText}</span> = xor( ${arr1.join(', ')} )`
+  document.querySelector('#squeezeThetaStep .fillin').innerHTML = str1
+
+
+}
+
+function squeezeRhoEnterHandler (i) {
+  for (let i = 0; i<1600; i++) {
+    getNinTable(elSqueezeRhoBeforeState, i).classList = 'bg'
+    getNinTable(elSqueezeRhoAfterState, i).classList = 'bg'
+  }
+
+  let x = i % 64
+  let y = Math.floor(i / 64)
+
+  let shiftAmt = [0, 1, 62, 28, 27, 36, 44, 6, 55, 20, 3, 10, 43, 25, 39, 41, 45, 15, 21, 8, 18, 2, 61, 56, 14]
+  
+  for (let i = 0; i<=5; i++) {
+    getXYInTable(elSqueezeRhoAfterState, (x+64+i)%64, y).classList = 'gray'
+    getXYInTable(elSqueezeRhoBeforeState, (x-shiftAmt[y]+64+i)%64, y).classList = 'gray'
+  }
+  getXYInTable(elSqueezeRhoAfterState, (x+64+6)%64, y).classList = 'gray1'
+  getXYInTable(elSqueezeRhoAfterState, (x+64+7)%64, y).classList = 'gray2'
+  getXYInTable(elSqueezeRhoAfterState, (x+64+8)%64, y).classList = 'gray3'
+  getXYInTable(elSqueezeRhoAfterState, (x+64+9)%64, y).classList = 'gray4'
+ 
+  getXYInTable(elSqueezeRhoBeforeState, (x-shiftAmt[y]+64+6)%64, y).classList = 'gray1'
+  getXYInTable(elSqueezeRhoBeforeState, (x-shiftAmt[y]+64+7)%64, y).classList = 'gray2'
+  getXYInTable(elSqueezeRhoBeforeState, (x-shiftAmt[y]+64+8)%64, y).classList = 'gray3'
+  getXYInTable(elSqueezeRhoBeforeState, (x-shiftAmt[y]+64+9)%64, y).classList = 'gray4'
+  
+
+  getXYInTable(elSqueezeRhoAfterState, x, y).classList = 'white'
+  getXYInTable(elSqueezeRhoBeforeState, (x-shiftAmt[y]+64)%64, y).classList = 'brightgreen'
+
+  document.querySelector('#squeezeRhoStep .fillin').innerHTML = `
+    Rotate Lane[&nbsp;&nbsp;<span class="white">${y+1}</span>&nbsp;&nbsp;]
+    &nbsp;&nbsp;
+    to the right by
+    &nbsp;&nbsp;
+    <span class="white">${shiftAmt[y]}</span>
+  `
+
+
+
+}
+
+function squeezePiEnterHandler (i) {
+  for (let i = 0; i<1600; i++) {
+    getNinTable(elSqueezePiBeforeState, i).classList = 'bg'
+    getNinTable(elSqueezePiAfterState, i).classList = 'bg'
+  }
+
+  let x = i % 64
+  let y = Math.floor(i / 64)
+
+  let indexes = [0, 6, 12, 18, 24, 3, 9, 10, 16, 22, 1, 7, 13, 19, 20, 4, 5, 11, 17, 23, 2, 8, 14, 15, 21]
+
+  for (let i = 0; i<64; i++) {
+    getXYInTable(elSqueezePiAfterState, i, y).classList ='gray'
+    getXYInTable(elSqueezePiBeforeState, i, indexes[y] ).classList = 'gray'
+  }
+  getXYInTable(elSqueezePiAfterState, x, y).classList = 'white'
+  getXYInTable(elSqueezePiBeforeState, x, indexes[y] ).classList = 'brightgreen'
+
+  document.querySelector('#squeezePiStep .fillin').innerHTML = `
+    Lane[&nbsp;&nbsp;<span class="white">${indexes[y]+1}</span>&nbsp;&nbsp;]
+    &nbsp;&nbsp;
+    becomes
+    &nbsp;&nbsp;
+    Lane[&nbsp;&nbsp;<span class="white">${y+1}</span>&nbsp;&nbsp;]
+  `
+}
+
+function squeezeChiEnterHandler (i) {
+  for (let i = 0; i<1600; i++) {
+    getNinTable(elSqueezeChiBeforeState, i).classList = 'bg'
+    getNinTable(elSqueezeChiAfterState, i).classList = 'bg'
+  }
+
+  let x = i % 64
+  let y = Math.floor(i / 64)
+  let ys = Math.floor(y/5)*5
+  let y1 = ys + ((y%5) + 1 ) % 5
+  let y2 = ys + ((y%5) + 2 ) % 5
+  
+
+
+  for (let i = 0; i<64; i++) {
+    for (let j = 0; j<5; j++) {
+      getXYInTable(elSqueezeChiBeforeState, i, ys+j ).classList ='gray'
+      getXYInTable(elSqueezeChiAfterState, i, ys+j ).classList ='gray'
+    }
+  }
+
+  
+  let p0 = getXYInTable(elSqueezeChiAfterState, x, y)
+  let p1 = getXYInTable(elSqueezeChiBeforeState, x, y)
+  let p2 = getXYInTable(elSqueezeChiBeforeState, x, y1)
+  let p3 = getXYInTable(elSqueezeChiBeforeState, x, y2)
+  p0.classList = 'white'
+  p1.classList = 'brightgreen'
+  p2.classList = 'brightgold'
+  p3.classList = 'brightred'
+
+  document.querySelector('#squeezeChiStep .fillin').innerHTML = `
+  <span class="white">${p0.innerText}</span> = 
+  <span class="brightgreen">${p1.innerText}</span> xor ( (
+  not <span class="brightgold">${p2.innerText}</span>
+  ) and <span class="brightred">${p3.innerText}</span>
+  )`
+
+
+
+
+}   
+
+
+
+function squeezeTakeLeaveHandler () {
+  // nothing to put here
+}
+
+function squeezeIotaLeaveHandler () {
+  for (let i = 0; i<1600; i++) {
+    getNinTable(elSqueezeIotaBeforeState, i).classList = ''
+    getNinTable(elSqueezeIotaAfterState, i).classList = ''
+  }
+  for (let i = 0; i<24*64; i++) {
+    getNinTable(elSqueezeIotaRoundConst, i).classList = ''
+  }
+  document.querySelector('#squeezeIotaStep .fillin').innerHTML = ''
+}
+
+function squeezeThetaLeaveHandler () {
+  for (let i = 0; i<1600; i++) {
+    getNinTable(elSqueezeThetaBeforeState, i).classList = ''
+    getNinTable(elSqueezeThetaAfterState, i).classList = ''
+  }
+  document.querySelector('#squeezeThetaStep .fillin').innerHTML = ''
+}
+
+function squeezeRhoLeaveHandler () {
+  for (let i = 0; i<1600; i++) {
+    getNinTable(elSqueezeRhoBeforeState, i).classList = ''
+    getNinTable(elSqueezeRhoAfterState, i).classList = ''
+  }
+  document.querySelector('#squeezeRhoStep .fillin').innerHTML = ''
+}
+
+function squeezePiLeaveHandler () {
+  for (let i = 0; i<1600; i++) {
+    getNinTable(elSqueezePiBeforeState, i).classList = ''
+    getNinTable(elSqueezePiAfterState, i).classList = ''
+  }
+  document.querySelector('#squeezePiStep .fillin').innerHTML = ''
+}
+
+function squeezeChiLeaveHandler () {
+  for (let i = 0; i<1600; i++) {
+    getNinTable(elSqueezeChiBeforeState, i).classList = ''
+    getNinTable(elSqueezeChiAfterState, i).classList = ''
+  }
+  document.querySelector('#squeezeChiStep .fillin').innerHTML = ''
+}
+
+
+
+
+
+
+
+
+    // [[number]]
+    function createTableFromInputBlocks(arr ) {
+      return arr.map(bl => '<li>'+ bl.map(bit => '<span>' + bit + '</span>').join('') +'</li>').join('')
+    }
+
+    function getXYInTable(table, x, y) {
+      return table.children[y].children[x]
+    }
+
+    function getNinTable(table, n) {
+      return table.getElementsByTagName('span')[n]
+    }
+
+    function createTableFromState(arr ) {
+      let str = ''
+      for (let i = 0; i<25; i++) {
+        str += '<li>'
+        str += lib.getLaneOfState(arr, i).map(bit => '<span>' + bit + '</span>').join('')
+        str += '</li>'
+      }
+      return str
+    }
+
+
+
+
+
+
+
+  </script>
+</body>
+</html>
